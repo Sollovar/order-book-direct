@@ -13,6 +13,7 @@ import {
   Wallet,
   X,
   Star,
+  Check,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -86,6 +87,9 @@ function Index() {
   const [countdown, setCountdown] = useState(39 * 60 + 58); // seconds
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
+  const [orderType, setOrderType] = useState("Limit");
+  const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
+  const ORDER_TYPES = ["Market", "Limit", "Stop Limit", "Stop Market", "Trailing Stop", "Post Only", "TWAP", "Scaled Order", "Chase Order"];
 
   useEffect(() => {
     const saved = localStorage.getItem("asterdex-theme");
@@ -307,8 +311,11 @@ function Index() {
 
 
 
-            <button className="w-full rounded-md bg-trade-surface py-2 flex items-center justify-center gap-1 text-[13px]">
-              Limit <span className="text-[8px] leading-none">▼</span>
+            <button
+              onClick={() => setOrderTypeSheetOpen(true)}
+              className="w-full rounded-md bg-trade-surface py-2 flex items-center justify-center gap-1 text-[13px]"
+            >
+              {orderType} <span className="text-[8px] leading-none">▼</span>
             </button>
 
             <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
@@ -568,6 +575,56 @@ function Index() {
           );
         })}
       </nav>
+
+      {/* Order Type Bottom Sheet */}
+      {orderTypeSheetOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setOrderTypeSheetOpen(false)}
+          />
+          {/* Sheet */}
+          <div className="relative bg-trade-surface rounded-t-2xl pb-8 z-10">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-trade-text/10">
+              <span className="text-[15px] font-medium text-trade-text">Order Type</span>
+              <button
+                onClick={() => setOrderTypeSheetOpen(false)}
+                className="h-7 w-7 flex items-center justify-center rounded-full bg-trade-text/10 active:opacity-60"
+              >
+                <X className="h-4 w-4 text-trade-text" />
+              </button>
+            </div>
+            {/* Options */}
+            <div className="flex flex-col">
+              {ORDER_TYPES.map((type) => (
+                <button
+                  key={type}
+                  onClick={() => {
+                    setOrderType(type);
+                    setOrderTypeSheetOpen(false);
+                  }}
+                  className="flex items-center justify-between px-5 py-4 active:bg-trade-text/5 transition-colors"
+                >
+                  <span
+                    className={`text-[15px] ${
+                      orderType === type
+                        ? "text-trade-text font-semibold"
+                        : "text-trade-text/70 font-normal"
+                    }`}
+                  >
+                    {type}
+                  </span>
+                  {orderType === type && (
+                    <Check className="h-4 w-4 text-trade-text" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
