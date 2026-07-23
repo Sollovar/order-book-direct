@@ -416,7 +416,7 @@ function Index() {
 
       {/* Market selector panel */}
       {pairsOpen && (
-        <div className="fixed inset-0 z-[60] flex flex-col bg-trade-bg">
+        <div className="fixed inset-0 z-[60] flex flex-col bg-trade-card">
           {/* Header */}
           <div className="flex items-center justify-between px-4 pt-5 pb-3">
             <span className="text-[11px] font-semibold tracking-widest text-trade-text-muted uppercase">Select Market</span>
@@ -467,8 +467,8 @@ function Index() {
                 onClick={() => setPairsSub(s)}
                 className={`flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
                   pairsSub === s
-                    ? "bg-trade-text text-trade-bg"
-                    : "bg-trade-card text-trade-text-muted"
+                    ? "bg-[#f0b90b] text-[#1a1200]"
+                    : "bg-trade-surface text-trade-text-muted"
                 }`}
               >
                 {s}
