@@ -390,7 +390,7 @@ function Index() {
       {/* Bottom tabs */}
       <section className="mt-2 rounded-xl bg-trade-card border border-trade-text/5">
         <div className="flex items-center justify-between border-b border-trade-text/5 px-3">
-          <div className="flex items-center gap-4 overflow-x-auto">
+          <div className="flex items-center justify-between flex-1">
             {tabs.map((t) => (
               <button
                 key={t}
