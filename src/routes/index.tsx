@@ -84,6 +84,20 @@ function Index() {
     }
   }, [theme, hasManualOverride]);
 
+  // Keep html/body background in sync so safe-area gaps match the theme
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+      root.style.backgroundColor = "oklch(0.1 0 0)";
+      document.body.style.backgroundColor = "oklch(0.1 0 0)";
+    } else {
+      root.classList.remove("dark");
+      root.style.backgroundColor = "oklch(0.98 0 0)";
+      document.body.style.backgroundColor = "oklch(0.98 0 0)";
+    }
+  }, [theme]);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
     setHasManualOverride(true);
