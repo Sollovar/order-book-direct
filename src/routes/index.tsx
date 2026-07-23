@@ -623,13 +623,14 @@ function Index() {
                     onClick={() => { setOrderType(label); setOrderTypeSheetOpen(false); }}
                     className={`relative flex flex-col items-start text-left rounded-2xl px-4 py-4 transition-all active:scale-[0.97] ${
                       active
-                        ? "bg-trade-primary/15 ring-1 ring-trade-primary/60"
+                        ? "ring-1 ring-[#f0b90b]/70"
                         : "bg-trade-text/5 ring-1 ring-transparent"
                     }`}
+                    style={active ? { backgroundColor: "rgba(240,185,11,0.12)" } : undefined}
                   >
                     {active && (
-                      <span className="absolute top-3 right-3 h-[18px] w-[18px] rounded-full bg-trade-primary flex items-center justify-center">
-                        <Check className="h-[10px] w-[10px] text-trade-primary-text" strokeWidth={3} />
+                      <span className="absolute top-3 right-3 h-[18px] w-[18px] rounded-full flex items-center justify-center" style={{ backgroundColor: "#f0b90b" }}>
+                        <Check className="h-[10px] w-[10px] text-black" strokeWidth={3} />
                       </span>
                     )}
                     <span className={`text-[14px] font-semibold mb-0.5 ${active ? "text-trade-text" : "text-trade-text/80"}`}>
