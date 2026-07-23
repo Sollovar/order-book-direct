@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Star,
   LineChart,
@@ -58,6 +58,9 @@ function Index() {
   const [tab, setTab] = useState("Open Orders");
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [hasManualOverride, setHasManualOverride] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [countdown, setCountdown] = useState(39 * 60 + 58); // seconds
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
 
   useEffect(() => {
@@ -103,6 +106,23 @@ function Index() {
     setHasManualOverride(true);
   };
 
+  // Funding countdown ticker
+  useEffect(() => {
+    countdownRef.current = setInterval(() => {
+      setCountdown((s) => (s > 0 ? s - 1 : 3600));
+    }, 1000);
+    return () => {
+      if (countdownRef.current) clearInterval(countdownRef.current);
+    };
+  }, []);
+
+  const fmtCountdown = (s: number) => {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  };
+
   return (
     <div
       className={`min-h-screen bg-trade-bg text-trade-text font-sans text-[13px] pb-6 ${
@@ -145,24 +165,59 @@ function Index() {
       </header>
 
       {/* Pair header */}
-      <div className="mx-1 mb-2 rounded-xl bg-trade-card border border-trade-text/5 px-3 py-2.5 flex items-center justify-between">
-        {/* Left: icon + symbol + leverage */}
-        <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-full bg-[#f7931a] flex items-center justify-center text-white font-bold text-[13px] shadow-sm">
-            ₿
+      <div className="mx-1 mb-2 rounded-xl bg-trade-card border border-trade-text/5 overflow-hidden">
+        {/* Top row */}
+        <div className="px-3 py-2.5 flex items-center justify-between">
+          {/* Left: icon + symbol + leverage */}
+          <div className="flex items-center gap-2">
+            <div className="h-7 w-7 rounded-full bg-[#f7931a] flex items-center justify-center text-white font-bold text-[13px] shadow-sm">
+              ₿
+            </div>
+            <span className="text-trade-text font-semibold text-[15px] tracking-tight">BTC</span>
+            <span className="rounded-md bg-trade-surface border border-trade-text/10 text-trade-text/60 text-[11px] px-1.5 py-0.5 font-medium">
+              20x
+            </span>
           </div>
-          <span className="text-trade-text font-semibold text-[15px] tracking-tight">BTC</span>
-          <span className="rounded-md bg-trade-surface border border-trade-text/10 text-trade-text/60 text-[11px] px-1.5 py-0.5 font-medium">
-            20x
-          </span>
+
+          {/* Right: price + change + dropdown toggle */}
+          <button
+            onClick={() => setStatsOpen((o) => !o)}
+            className="flex items-center gap-2 active:opacity-70 transition-opacity"
+          >
+            <span className="text-trade-text font-medium text-[15px]">66,007.4</span>
+            <span className="text-trade-ask text-[13px] font-medium">-0.52%</span>
+            <div className={`transition-transform duration-200 ${statsOpen ? "rotate-180" : ""}`}>
+              <ChevronDown className="h-4 w-4 text-trade-text/50" />
+            </div>
+          </button>
         </div>
 
-        {/* Right: price + change + dropdown */}
-        <div className="flex items-center gap-2">
-          <span className="text-trade-text font-medium text-[15px]">66,007.4</span>
-          <span className="text-trade-ask text-[13px] font-medium">-0.52%</span>
-          <ChevronDown className="h-4 w-4 text-trade-text/50" />
-        </div>
+        {/* Expanded stats panel */}
+        {statsOpen && (
+          <div className="border-t border-trade-text/5 px-3 pt-3 pb-3 grid grid-cols-2 gap-x-4 gap-y-4">
+            <StatCell
+              label="Mark / Oracle"
+              value="66,009.1 / 66,008.6"
+            />
+            <StatCell
+              label="24h Volume"
+              value="$2,847,391,204"
+            />
+            <StatCell
+              label="Open Interest"
+              value="$1,315,891,490"
+            />
+            <div>
+              <div className="text-[11px] text-trade-text-muted border-b border-dashed border-trade-text/15 pb-0.5 mb-1">
+                Funding / Countdown
+              </div>
+              <div className="flex items-center gap-2 text-[13px]">
+                <span className="text-trade-bid font-medium">0.0013%</span>
+                <span className="text-trade-text/70 tabular-nums">{fmtCountdown(countdown)}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main trading card */}
@@ -364,5 +419,16 @@ function IconBtn({ children }: { children: React.ReactNode }) {
     <button className="h-10 w-10 rounded-full bg-trade-surface flex items-center justify-center">
       {children}
     </button>
+  );
+}
+
+function StatCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-[11px] text-trade-text-muted border-b border-dashed border-trade-text/15 pb-0.5 mb-1">
+        {label}
+      </div>
+      <div className="text-[13px] text-trade-text font-medium">{value}</div>
+    </div>
   );
 }
