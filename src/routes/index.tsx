@@ -300,17 +300,6 @@ function Index() {
         </div>
       </section>
 
-      {/* Floating pill */}
-      <div className="mt-6 flex justify-center">
-        <div className="flex items-center gap-1 bg-trade-card border border-trade-text/10 rounded-full p-1">
-          <button className="h-9 w-16 rounded-full bg-trade-surface flex items-center justify-center">
-            <FileText className="h-4 w-4 text-trade-text/80" />
-          </button>
-          <button className="h-9 w-16 rounded-full flex items-center justify-center">
-            <CandlestickChart className="h-4 w-4 text-trade-text/60" />
-          </button>
-        </div>
-      </div>
 
       {/* Fake browser chrome */}
       <div className="mt-6 mx-1 flex items-center justify-between">
