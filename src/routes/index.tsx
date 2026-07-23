@@ -586,23 +586,19 @@ function Index() {
             onClick={() => setOrderTypeSheetOpen(false)}
           />
           {/* Sheet */}
-          <div
-            className="relative rounded-t-2xl pb-10"
-            style={{ backgroundColor: "#1c1c1e" }}
-          >
+          <div className="relative bg-trade-card rounded-t-2xl pb-10">
             {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
-              <div className="h-1 w-10 rounded-full bg-white/20" />
+              <div className="h-1 w-10 rounded-full bg-trade-text/20" />
             </div>
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
-              <span className="text-[15px] font-semibold text-white">Order Type</span>
+            <div className="flex items-center justify-between px-5 py-3 border-b border-trade-text/10">
+              <span className="text-[15px] font-semibold text-trade-text">Order Type</span>
               <button
                 onClick={() => setOrderTypeSheetOpen(false)}
-                className="h-7 w-7 flex items-center justify-center rounded-full active:opacity-60"
-                style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+                className="h-7 w-7 flex items-center justify-center rounded-full bg-trade-text/10 active:opacity-60"
               >
-                <X className="h-4 w-4 text-white" />
+                <X className="h-4 w-4 text-trade-text" />
               </button>
             </div>
             {/* Options */}
@@ -618,13 +614,13 @@ function Index() {
                 >
                   <span
                     className={`text-[15px] ${
-                      orderType === type ? "text-white font-semibold" : "text-white/60 font-normal"
+                      orderType === type ? "text-trade-text font-semibold" : "text-trade-text-muted font-normal"
                     }`}
                   >
                     {type}
                   </span>
                   {orderType === type && (
-                    <Check className="h-4 w-4 text-white" />
+                    <Check className="h-4 w-4 text-trade-text" />
                   )}
                 </button>
               ))}
