@@ -202,7 +202,7 @@ function Index() {
               ₿
             </div>
             <span className="text-trade-text font-semibold text-[15px] tracking-tight">BTC</span>
-            <ChevronDown className="h-3.5 w-3.5 text-trade-text/50" />
+            <span className="text-[9px] text-trade-text/50 leading-none">▼</span>
           </button>
 
           {/* Right: price + change + dropdown toggle */}
@@ -430,11 +430,11 @@ function Index() {
             <div className="flex items-center gap-2 rounded-xl bg-trade-card border border-trade-text/8 px-3 py-2.5">
               <Search className="h-4 w-4 text-trade-text/40 flex-shrink-0" />
               <input
-                autoFocus
                 value={pairsSearch}
                 onChange={(e) => setPairsSearch(e.target.value)}
                 placeholder="Search"
-                className="flex-1 bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                className="flex-1 bg-transparent text-trade-text placeholder:text-trade-text/30 outline-none"
+                style={{ fontSize: "16px" }}
               />
             </div>
           </div>
