@@ -86,7 +86,7 @@ function Index() {
       </header>
 
       {/* Main trading card */}
-      <section className="mx-3 rounded-xl bg-[#111111] border border-white/5 p-3">
+      <section className="mx-1 rounded-xl bg-[#111111] border border-white/5 p-3">
         {/* Symbol row */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -245,7 +245,7 @@ function Index() {
       </section>
 
       {/* Bottom tabs */}
-      <section className="mx-3 mt-3 rounded-xl bg-[#111111] border border-white/5">
+      <section className="mx-1 mt-3 rounded-xl bg-[#111111] border border-white/5">
         <div className="flex items-center justify-between border-b border-white/5 px-3">
           <div className="flex items-center gap-4 overflow-x-auto">
             {tabs.map((t) => (
@@ -284,7 +284,7 @@ function Index() {
       </div>
 
       {/* Fake browser chrome */}
-      <div className="mt-6 mx-3 flex items-center justify-between">
+      <div className="mt-6 mx-1 flex items-center justify-between">
         <IconBtn>
           <ArrowLeft className="h-4 w-4 text-white/80" />
         </IconBtn>
