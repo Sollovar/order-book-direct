@@ -186,9 +186,11 @@ function Index() {
           >
             <span className="text-trade-text font-medium text-[15px]">66,007.4</span>
             <span className="text-trade-ask text-[13px] font-medium">-0.52%</span>
-            <div className={`transition-transform duration-200 ${statsOpen ? "rotate-180" : ""}`}>
-              <ChevronDown className="h-4 w-4 text-trade-text/50" />
-            </div>
+            <span
+              className={`text-[9px] text-trade-text/50 leading-none transition-transform duration-200 inline-block ${statsOpen ? "rotate-180" : ""}`}
+            >
+              ▼
+            </span>
           </button>
         </div>
 
@@ -281,7 +283,7 @@ function Index() {
 
 
             <button className="w-full rounded-md bg-trade-surface py-2 flex items-center justify-center gap-1 text-[13px]">
-              Limit <ChevronDown className="h-3 w-3" />
+              Limit <span className="text-[8px] leading-none">▼</span>
             </button>
 
             <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
