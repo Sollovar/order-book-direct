@@ -1,19 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
-  Star,
-  LineChart,
   ChevronDown,
   Menu,
   Plus,
   FileText,
-  CandlestickChart,
   Search,
   Link2,
   Sun,
   Moon,
-  BarChart2,
-  User,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -61,7 +56,6 @@ function Index() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [hasManualOverride, setHasManualOverride] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
-  const [navTab, setNavTab] = useState("Trade");
   const [countdown, setCountdown] = useState(39 * 60 + 58); // seconds
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
@@ -128,7 +122,7 @@ function Index() {
 
   return (
     <div
-      className={`min-h-screen bg-trade-bg text-trade-text font-sans text-[13px] pb-20 ${
+      className={`min-h-screen bg-trade-bg text-trade-text font-sans text-[13px] pb-4 ${
         theme === "dark" ? "dark" : ""
       }`}
     >
@@ -381,7 +375,7 @@ function Index() {
           </div>
           <FileText className="h-4 w-4 text-trade-text/60" />
         </div>
-        <div className="flex flex-col items-center justify-center py-12 gap-3">
+        <div className="flex flex-col items-center justify-center py-6 gap-3">
           <div className="h-14 w-14 rounded-lg bg-trade-surface flex items-center justify-center relative">
             <Link2 className="h-6 w-6 text-trade-text/40" />
             <Search className="h-3.5 w-3.5 text-trade-text/60 absolute bottom-2 right-2" />
@@ -390,28 +384,6 @@ function Index() {
         </div>
       </section>
 
-      {/* Floating bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-trade-card border-t border-trade-text/5 flex items-center justify-around px-6 py-3 pb-safe">
-        {[
-          { label: "Markets", icon: BarChart2 },
-          { label: "Trade",   icon: CandlestickChart },
-          { label: "Account", icon: User },
-        ].map(({ label, icon: Icon }) => {
-          const active = navTab === label;
-          return (
-            <button
-              key={label}
-              onClick={() => setNavTab(label)}
-              className={`flex flex-col items-center gap-1 transition-colors ${
-                active ? "text-trade-bid" : "text-trade-text/40"
-              }`}
-            >
-              <Icon className="h-5 w-5" />
-              <span className="text-[11px] font-medium">{label}</span>
-            </button>
-          );
-        })}
-      </nav>
 
     </div>
   );
