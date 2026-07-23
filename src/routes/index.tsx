@@ -11,6 +11,7 @@ import {
   Moon,
   BarChart2,
   UserCircle,
+  Wallet,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -353,7 +354,8 @@ function Index() {
               <Line label="Max" value="0.00 USDT" />
             </div>
 
-            <button className="w-full rounded-full bg-trade-primary text-trade-primary-text py-2.5 text-[14px] font-medium mt-1">
+            <button className="w-full rounded-full bg-[#f0b90b] text-[#1a1200] py-2.5 text-[14px] font-bold mt-1 flex items-center justify-center gap-2">
+              <Wallet className="h-4 w-4" />
               Connect
             </button>
           </div>
@@ -393,7 +395,7 @@ function Index() {
           {
             label: "Markets",
             icon: (active: boolean) => (
-              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-trade-bid" : "text-trade-text/40"}`} />
+              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
             ),
           },
           {
@@ -401,15 +403,15 @@ function Index() {
             icon: (active: boolean) => (
               /* Two overlapping circles — Hyperliquid logo mark */
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
-                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-trade-bid" : "text-trade-text/40"} />
-                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-trade-bid" : "text-trade-text/40"} />
+                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
+                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
               </svg>
             ),
           },
           {
             label: "Account",
             icon: (active: boolean) => (
-              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-trade-bid" : "text-trade-text/40"}`} />
+              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
             ),
           },
         ].map(({ label, icon }) => {
@@ -421,7 +423,7 @@ function Index() {
               className="flex items-center gap-2 transition-opacity active:opacity-60"
             >
               {icon(active)}
-              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-trade-bid" : "text-trade-text/40"}`}>
+              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`}>
                 {label}
               </span>
             </button>
