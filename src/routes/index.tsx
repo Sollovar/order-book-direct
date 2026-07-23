@@ -135,31 +135,12 @@ function Index() {
 
       {/* Main trading card */}
       <section className="mx-1 rounded-xl bg-trade-card border border-trade-text/5 p-3">
-        {/* Symbol row */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-[15px]">BTCUSDT</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-trade-text/10 text-trade-text/80">
-              Perp
-            </span>
-            <ChevronDown className="h-3.5 w-3.5 text-trade-text/60" />
-            <span className="text-trade-ask text-[13px] ml-1">-0.30%</span>
-          </div>
-          <div className="flex items-center gap-3 text-trade-text/70">
-            <Star className="h-4 w-4" />
-            <LineChart className="h-4 w-4" />
-          </div>
-        </div>
 
         <div className="grid grid-cols-2 gap-3 mt-3">
           {/* LEFT: order book */}
           <div>
-            <div className="text-[11px] text-trade-text-muted border-b border-dashed border-trade-text/15 pb-1">
-              Funding (8h) / Countdown
-            </div>
-            <div className="text-[12px] mt-1">0.0043% / 07:45:54</div>
+            <div className="flex items-center justify-between text-[10px] text-trade-text-muted">
 
-            <div className="flex items-center justify-between text-[10px] text-trade-text-muted mt-3">
               <div>
                 Price
                 <div>(USDT)</div>
@@ -209,10 +190,8 @@ function Index() {
 
           {/* RIGHT: order form */}
           <div className="space-y-2">
-            <div className="grid grid-cols-2 gap-2">
-              <button className="rounded-md bg-trade-surface py-2 text-[13px]">Cross</button>
-              <button className="rounded-md bg-trade-surface py-2 text-[13px]">20x</button>
-            </div>
+
+
 
             <button className="w-full rounded-md bg-trade-surface py-2 flex items-center justify-center gap-1 text-[13px]">
               Limit <ChevronDown className="h-3 w-3" />
@@ -319,17 +298,6 @@ function Index() {
         </div>
       </section>
 
-      {/* Floating pill */}
-      <div className="mt-6 flex justify-center">
-        <div className="flex items-center gap-1 bg-trade-card border border-trade-text/10 rounded-full p-1">
-          <button className="h-9 w-16 rounded-full bg-trade-surface flex items-center justify-center">
-            <FileText className="h-4 w-4 text-trade-text/80" />
-          </button>
-          <button className="h-9 w-16 rounded-full flex items-center justify-center">
-            <CandlestickChart className="h-4 w-4 text-trade-text/60" />
-          </button>
-        </div>
-      </div>
 
       {/* Fake browser chrome */}
       <div className="mt-6 mx-1 flex items-center justify-between">
