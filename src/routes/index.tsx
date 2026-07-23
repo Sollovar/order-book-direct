@@ -12,6 +12,8 @@ import {
   BarChart2,
   UserCircle,
   Wallet,
+  X,
+  Star,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -54,12 +56,34 @@ const bids: Row[] = [
   { price: "66,002.3", size: "170.87K", pct: 55 },
 ];
 
+type Pair = { symbol: string; base: string; lev: string; vol: string; oi: string; price: string; change: string; up: boolean; color: string };
+const PAIRS: Pair[] = [
+  { symbol: "BTCUSDT",  base: "BTC",  lev: "20x", vol: "$38,291,044", oi: "$2,104,983,221", price: "66,007.4", change: "-0.52%", up: false, color: "#f7931a" },
+  { symbol: "ETHUSDT",  base: "ETH",  lev: "20x", vol: "$21,847,203", oi: "$1,341,002,104", price: "3,487.2",  change: "+1.14%", up: true,  color: "#627eea" },
+  { symbol: "WLDUSDT",  base: "WLD",  lev: "50x", vol: "$247,066",    oi: "$1,693,667",    price: "0.3850",    change: "-0.47%", up: false, color: "#1a1a2e" },
+  { symbol: "FETUSDT",  base: "FET",  lev: "10x", vol: "$15,430",     oi: "$184,540",      price: "0.1532",    change: "-1.42%", up: false, color: "#2d7dd2" },
+  { symbol: "SOLUSDT",  base: "SOL",  lev: "20x", vol: "$14,203,991", oi: "$891,234,001",  price: "178.45",    change: "+2.31%", up: true,  color: "#9945ff" },
+  { symbol: "SAHARAUSDT",base:"SAH", lev: "5x",  vol: "$3,235",      oi: "$130,043",      price: "0.00874",   change: "-2.02%", up: false, color: "#e8b84b" },
+  { symbol: "TAGUSDT",  base: "TAG",  lev: "5x",  vol: "$63,625",     oi: "$138,674",      price: "0.000997",  change: "-6.30%", up: false, color: "#00c896" },
+  { symbol: "CUSDT",    base: "C",    lev: "5x",  vol: "$83",         oi: "$13,890",       price: "0.06457",   change: "-0.94%", up: false, color: "#888" },
+  { symbol: "OPENUSDT", base: "OPEN", lev: "5x",  vol: "$3,218",      oi: "$433,066",      price: "0.1707",    change: "+4.60%", up: true,  color: "#ff6b35" },
+  { symbol: "FLOCKUSDT",base: "FLK",  lev: "5x",  vol: "$5,110",      oi: "$16,060",       price: "0.03158",   change: "-0.63%", up: false, color: "#4a90e2" },
+  { symbol: "HOLOUSDT", base: "HOL",  lev: "5x",  vol: "$2,021",      oi: "$25,487",       price: "0.06649",   change: "+0.20%", up: true,  color: "#1db954" },
+  { symbol: "RECALLUSDT",base:"REC",  lev: "5x",  vol: "$3,777",      oi: "$24,127",       price: "0.03067",   change: "-4.05%", up: false, color: "#aaa" },
+  { symbol: "KITEUSDT", base: "KITE", lev: "5x",  vol: "$6,433",      oi: "$877,955",      price: "0.11364",   change: "-6.97%", up: false, color: "#c0392b" },
+  { symbol: "TRUSTUSDT",base: "TRS",  lev: "5x",  vol: "$25,657",     oi: "$80,754",       price: "0.05005",   change: "+2.79%", up: true,  color: "#27ae60" },
+];
+
 function Index() {
   const [tab, setTab] = useState("Open Orders");
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [hasManualOverride, setHasManualOverride] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
   const [navTab, setNavTab] = useState("Trade");
+  const [pairsOpen, setPairsOpen] = useState(false);
+  const [pairsSearch, setPairsSearch] = useState("");
+  const [pairsCat, setPairsCat] = useState("Futures");
+  const [pairsSub, setPairsSub] = useState("All markets");
   const [countdown, setCountdown] = useState(39 * 60 + 58); // seconds
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
@@ -169,16 +193,17 @@ function Index() {
       <div className="mb-1 rounded-xl bg-trade-card border border-trade-text/5 overflow-hidden">
         {/* Top row */}
         <div className="px-3 py-2.5 flex items-center justify-between">
-          {/* Left: icon + symbol + leverage */}
-          <div className="flex items-center gap-2">
+          {/* Left: icon + symbol (tappable → market selector) */}
+          <button
+            onClick={() => setPairsOpen(true)}
+            className="flex items-center gap-2 active:opacity-70 transition-opacity"
+          >
             <div className="h-7 w-7 rounded-full bg-[#f7931a] flex items-center justify-center text-white font-bold text-[13px] shadow-sm">
               ₿
             </div>
             <span className="text-trade-text font-semibold text-[15px] tracking-tight">BTC</span>
-            <span className="rounded-md bg-trade-surface border border-trade-text/10 text-trade-text/60 text-[11px] px-1.5 py-0.5 font-medium">
-              20x
-            </span>
-          </div>
+            <ChevronDown className="h-3.5 w-3.5 text-trade-text/50" />
+          </button>
 
           {/* Right: price + change + dropdown toggle */}
           <button
@@ -388,6 +413,121 @@ function Index() {
           <div className="text-trade-text-muted text-[13px]">Please connect a wallet first</div>
         </div>
       </section>
+
+      {/* Market selector panel */}
+      {pairsOpen && (
+        <div className="fixed inset-0 z-[60] flex flex-col bg-trade-bg">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 pt-5 pb-3">
+            <span className="text-[11px] font-semibold tracking-widest text-trade-text-muted uppercase">Select Market</span>
+            <button onClick={() => setPairsOpen(false)} className="p-1 text-trade-text/60 active:opacity-50">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Search */}
+          <div className="px-4 pb-3">
+            <div className="flex items-center gap-2 rounded-xl bg-trade-card border border-trade-text/8 px-3 py-2.5">
+              <Search className="h-4 w-4 text-trade-text/40 flex-shrink-0" />
+              <input
+                autoFocus
+                value={pairsSearch}
+                onChange={(e) => setPairsSearch(e.target.value)}
+                placeholder="Search"
+                className="flex-1 bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Category tabs */}
+          <div className="flex items-center gap-5 px-4 border-b border-trade-text/8">
+            {["Favorites", "Futures", "Spot", "Prediction"].map((c) => (
+              <button
+                key={c}
+                onClick={() => setPairsCat(c)}
+                className={`pb-2.5 text-[14px] font-medium border-b-2 transition-colors ${
+                  pairsCat === c
+                    ? "border-trade-text text-trade-text"
+                    : "border-transparent text-trade-text-muted"
+                }`}
+              >
+                {c}
+                {c === "Prediction" && (
+                  <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-trade-ask align-middle" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Sub-category tabs */}
+          <div className="flex items-center gap-2 px-4 py-2.5 overflow-x-auto">
+            {["All markets", "Top", "New", "Meme", "AI", "Pre-launch", "Stocks"].map((s) => (
+              <button
+                key={s}
+                onClick={() => setPairsSub(s)}
+                className={`flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
+                  pairsSub === s
+                    ? "bg-trade-text text-trade-bg"
+                    : "bg-trade-card text-trade-text-muted"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          {/* Column headers */}
+          <div className="flex items-end justify-between px-4 pb-2 pt-1">
+            <span className="text-[11px] text-trade-text-muted">Symbols</span>
+            <div className="flex flex-col items-end text-right">
+              <span className="text-[11px] text-trade-text-muted">Volume</span>
+              <span className="text-[11px] text-trade-text-muted">Open interest</span>
+            </div>
+            <div className="flex flex-col items-end text-right">
+              <span className="text-[11px] text-trade-text-muted">Price</span>
+              <span className="text-[11px] text-trade-text-muted">24h change</span>
+            </div>
+          </div>
+
+          {/* Pairs list */}
+          <div className="flex-1 overflow-y-auto">
+            {PAIRS.filter((p) =>
+              pairsSearch === "" || p.symbol.toLowerCase().includes(pairsSearch.toLowerCase())
+            ).map((p) => (
+              <button
+                key={p.symbol}
+                onClick={() => setPairsOpen(false)}
+                className="w-full flex items-center px-4 py-3 border-b border-trade-text/5 active:bg-trade-card transition-colors"
+              >
+                {/* Star */}
+                <Star className="h-4 w-4 text-trade-text/25 mr-3 flex-shrink-0" />
+                {/* Icon */}
+                <div
+                  className="h-7 w-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mr-2.5"
+                  style={{ backgroundColor: p.color }}
+                >
+                  {p.base.slice(0, 2)}
+                </div>
+                {/* Symbol + lev */}
+                <div className="flex flex-col items-start min-w-0 flex-1">
+                  <span className="text-[13px] font-semibold text-trade-text leading-tight">{p.symbol}</span>
+                  <span className="text-[10px] text-trade-text-muted bg-trade-surface rounded px-1 mt-0.5">{p.lev}</span>
+                </div>
+                {/* Vol / OI */}
+                <div className="flex flex-col items-end mr-4 text-right">
+                  <span className="text-[12px] text-trade-text">{p.vol}</span>
+                  <span className="text-[11px] text-trade-text-muted">{p.oi}</span>
+                </div>
+                {/* Price / change */}
+                <div className="flex flex-col items-end text-right w-[70px]">
+                  <span className="text-[12px] text-trade-text">{p.price}</span>
+                  <span className={`text-[11px] font-medium ${p.up ? "text-trade-bid" : "text-trade-ask"}`}>{p.change}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Bottom nav — Hyperliquid style */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-trade-card border-t border-trade-text/5 flex items-center justify-around px-8 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
