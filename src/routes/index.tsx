@@ -4,7 +4,6 @@ import {
   ChevronDown,
   Menu,
   Plus,
-  FileText,
   Search,
   Link2,
   Sun,
@@ -403,7 +402,6 @@ function Index() {
               </button>
             ))}
           </div>
-          <FileText className="h-4 w-4 text-trade-text/60" />
         </div>
         <div className="flex flex-col items-center justify-center py-6 gap-3">
           <div className="h-14 w-14 rounded-lg bg-trade-surface flex items-center justify-center relative">
