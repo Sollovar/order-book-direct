@@ -6,9 +6,6 @@ import {
   ChevronDown,
   Menu,
   Plus,
-  ArrowLeft,
-  RefreshCw,
-  MoreHorizontal,
   FileText,
   CandlestickChart,
   Search,
@@ -299,20 +296,6 @@ function Index() {
       </section>
 
 
-      {/* Fake browser chrome */}
-      <div className="mt-6 mx-1 flex items-center justify-between">
-        <IconBtn>
-          <ArrowLeft className="h-4 w-4 text-trade-text/80" />
-        </IconBtn>
-        <div className="flex items-center gap-2 bg-trade-surface rounded-full px-4 py-2 text-[13px] text-trade-text/80">
-          <FileText className="h-4 w-4" />
-          asterdex.com
-          <RefreshCw className="h-3.5 w-3.5" />
-        </div>
-        <IconBtn>
-          <MoreHorizontal className="h-4 w-4 text-trade-text/80" />
-        </IconBtn>
-      </div>
     </div>
   );
 }
