@@ -588,7 +588,7 @@ function Index() {
           {/* Sheet */}
           <div
             className="relative rounded-t-2xl pb-10"
-            style={{ backgroundColor: "var(--color-trade-surface, #1c1c1e)" }}
+            style={{ backgroundColor: "#1c1c1e" }}
           >
             {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
