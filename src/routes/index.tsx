@@ -388,28 +388,28 @@ function Index() {
       </section>
 
       {/* Bottom nav — Hyperliquid style */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0d1117] border-t border-white/[0.06] flex items-center justify-around px-8 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-trade-card border-t border-trade-text/5 flex items-center justify-around px-8 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
         {[
           {
             label: "Markets",
             icon: (active: boolean) => (
-              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#4fffb0]" : "text-white/50"}`} />
+              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-trade-bid" : "text-trade-text/40"}`} />
             ),
           },
           {
             label: "Trade",
             icon: (active: boolean) => (
               /* Two overlapping circles — Hyperliquid logo mark */
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <circle cx="6.5" cy="9" r="5.5" fill={active ? "#4fffb0" : "rgba(255,255,255,0.35)"} />
-                <circle cx="11.5" cy="9" r="5.5" fill={active ? "#4fffb0" : "rgba(255,255,255,0.35)"} fillOpacity="0.65" />
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
+                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-trade-bid" : "text-trade-text/40"} />
+                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-trade-bid" : "text-trade-text/40"} />
               </svg>
             ),
           },
           {
             label: "Account",
             icon: (active: boolean) => (
-              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#4fffb0]" : "text-white/50"}`} />
+              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-trade-bid" : "text-trade-text/40"}`} />
             ),
           },
         ].map(({ label, icon }) => {
@@ -421,7 +421,7 @@ function Index() {
               className="flex items-center gap-2 transition-opacity active:opacity-60"
             >
               {icon(active)}
-              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#4fffb0]" : "text-white/50"}`}>
+              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-trade-bid" : "text-trade-text/40"}`}>
                 {label}
               </span>
             </button>
