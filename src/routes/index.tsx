@@ -460,7 +460,7 @@ function Index() {
           </div>
 
           {/* Sub-category tabs */}
-          <div className="flex items-center gap-2 px-4 py-2.5 overflow-x-auto">
+          <div className="flex items-center justify-between px-4 py-2.5">
             {["All markets", "Top", "New", "Meme", "AI", "Pre-launch", "Stocks"].map((s) => (
               <button
                 key={s}
