@@ -60,18 +60,37 @@ const bids: Row[] = [
 function Index() {
   const [tab, setTab] = useState("Open Orders");
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [hasManualOverride, setHasManualOverride] = useState(false);
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
 
   useEffect(() => {
     const saved = localStorage.getItem("asterdex-theme");
     if (saved === "light" || saved === "dark") {
       setTheme(saved);
+      setHasManualOverride(true);
+      return;
     }
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    setTheme(media.matches ? "dark" : "light");
+
+    const listener = (event: MediaQueryListEvent) => {
+      setTheme(event.matches ? "dark" : "light");
+    };
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("asterdex-theme", theme);
-  }, [theme]);
+    if (hasManualOverride) {
+      localStorage.setItem("asterdex-theme", theme);
+    }
+  }, [theme, hasManualOverride]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+    setHasManualOverride(true);
+  };
 
   return (
     <div
