@@ -465,10 +465,10 @@ function Index() {
               <button
                 key={s}
                 onClick={() => setPairsSub(s)}
-                className={`flex-shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
+                className={`flex-shrink-0 text-[13px] font-medium transition-colors ${
                   pairsSub === s
-                    ? "bg-[#f0b90b] text-[#1a1200]"
-                    : "bg-trade-surface text-trade-text-muted"
+                    ? "text-[#f0b90b]"
+                    : "text-trade-text-muted"
                 }`}
               >
                 {s}
