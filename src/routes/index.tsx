@@ -190,10 +190,8 @@ function Index() {
 
           {/* RIGHT: order form */}
           <div className="space-y-2">
-            <div className="grid grid-cols-2 gap-2">
-              <button className="rounded-md bg-trade-surface py-2 text-[13px]">Cross</button>
-              <button className="rounded-md bg-trade-surface py-2 text-[13px]">20x</button>
-            </div>
+
+
 
             <button className="w-full rounded-md bg-trade-surface py-2 flex items-center justify-center gap-1 text-[13px]">
               Limit <ChevronDown className="h-3 w-3" />
