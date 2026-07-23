@@ -62,7 +62,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans text-[13px] pb-6">
       {/* Top nav */}
-      <header className="flex items-center justify-between px-4 pt-4 pb-3">
+      <header className="flex items-center justify-between px-2 pt-4 pb-3">
         <div className="h-8 w-8 rounded-full border border-white/15 flex items-center justify-center">
           <div className="h-4 w-4 rounded-full border-2 border-white/70 border-t-transparent rotate-45" />
         </div>
@@ -86,7 +86,7 @@ function Index() {
       </header>
 
       {/* Main trading card */}
-      <section className="mx-3 rounded-xl bg-[#111111] border border-white/5 p-3">
+      <section className="mx-1 rounded-xl bg-[#111111] border border-white/5 p-3">
         {/* Symbol row */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -245,7 +245,7 @@ function Index() {
       </section>
 
       {/* Bottom tabs */}
-      <section className="mx-3 mt-3 rounded-xl bg-[#111111] border border-white/5">
+      <section className="mx-1 mt-3 rounded-xl bg-[#111111] border border-white/5">
         <div className="flex items-center justify-between border-b border-white/5 px-3">
           <div className="flex items-center gap-4 overflow-x-auto">
             {tabs.map((t) => (
@@ -284,7 +284,7 @@ function Index() {
       </div>
 
       {/* Fake browser chrome */}
-      <div className="mt-6 mx-3 flex items-center justify-between">
+      <div className="mt-6 mx-1 flex items-center justify-between">
         <IconBtn>
           <ArrowLeft className="h-4 w-4 text-white/80" />
         </IconBtn>
