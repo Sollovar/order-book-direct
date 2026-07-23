@@ -117,7 +117,7 @@ function Index() {
             Old <span className="text-trade-text/50">⇌</span>
           </button>
           <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={toggleTheme}
             className="p-2 rounded-full border border-trade-text/15"
             aria-label="Toggle theme"
           >
