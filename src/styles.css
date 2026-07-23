@@ -59,6 +59,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-trade-bg: var(--trade-bg);
+  --color-trade-card: var(--trade-card);
+  --color-trade-text: var(--trade-text);
+  --color-trade-text-muted: var(--trade-text-muted);
+  --color-trade-border: var(--trade-border);
+  --color-trade-surface: var(--trade-surface);
+  --color-trade-ask: var(--trade-ask);
+  --color-trade-bid: var(--trade-bid);
+  --color-trade-primary: var(--trade-primary);
+  --color-trade-primary-text: var(--trade-primary-text);
 }
 
 :root {
@@ -95,6 +105,16 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --trade-bg: oklch(0.98 0 0);
+  --trade-card: oklch(1 0 0);
+  --trade-text: oklch(0.2 0 0);
+  --trade-text-muted: oklch(0.5 0 0);
+  --trade-border: oklch(0 0 0 / 5%);
+  --trade-surface: oklch(0 0 0 / 5%);
+  --trade-ask: oklch(0.62 0.2 22);
+  --trade-bid: oklch(0.72 0.2 155);
+  --trade-primary: oklch(0.85 0.05 80);
+  --trade-primary-text: oklch(0.2 0 0);
 }
 
 .dark {
@@ -130,6 +150,16 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --trade-bg: oklch(0.1 0 0);
+  --trade-card: oklch(0.14 0 0);
+  --trade-text: oklch(1 0 0);
+  --trade-text-muted: oklch(0.7 0 0);
+  --trade-border: oklch(1 0 0 / 5%);
+  --trade-surface: oklch(1 0 0 / 5%);
+  --trade-ask: oklch(0.65 0.2 20);
+  --trade-bid: oklch(0.7 0.2 150);
+  --trade-primary: oklch(0.85 0.05 80);
+  --trade-primary-text: oklch(0.2 0 0);
 }
 
 @layer base {
