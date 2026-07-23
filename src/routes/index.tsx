@@ -135,21 +135,6 @@ function Index() {
 
       {/* Main trading card */}
       <section className="mx-1 rounded-xl bg-trade-card border border-trade-text/5 p-3">
-        {/* Symbol row */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-[15px]">BTCUSDT</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-trade-text/10 text-trade-text/80">
-              Perp
-            </span>
-            <ChevronDown className="h-3.5 w-3.5 text-trade-text/60" />
-            <span className="text-trade-ask text-[13px] ml-1">-0.30%</span>
-          </div>
-          <div className="flex items-center gap-3 text-trade-text/70">
-            <Star className="h-4 w-4" />
-            <LineChart className="h-4 w-4" />
-          </div>
-        </div>
 
         <div className="grid grid-cols-2 gap-3 mt-3">
           {/* LEFT: order book */}
