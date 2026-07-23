@@ -90,7 +90,14 @@ function Index() {
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
-  const ORDER_TYPES = ["Market", "Limit", "Stop Limit", "Stop Market", "Trailing Stop", "Post Only", "TWAP", "Scaled Order", "Chase Order"];
+  const ORDER_TYPES: { label: string; desc: string }[] = [
+    { label: "Limit",       desc: "Set your price" },
+    { label: "Market",      desc: "Fill instantly" },
+    { label: "Take Profit", desc: "Lock in gains" },
+    { label: "Stop Loss",   desc: "Cap your risk" },
+    { label: "Post Only",   desc: "Maker only" },
+    { label: "Ladder",      desc: "Split entries" },
+  ];
 
   useEffect(() => {
     const saved = localStorage.getItem("asterdex-theme");
@@ -582,48 +589,56 @@ function Index() {
         <div className="fixed inset-0 flex flex-col justify-end" style={{ zIndex: 9999 }}>
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/70"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setOrderTypeSheetOpen(false)}
           />
           {/* Sheet */}
-          <div className="relative bg-trade-card rounded-t-2xl pb-10">
-            {/* Handle bar */}
-            <div className="flex justify-center pt-3 pb-1">
-              <div className="h-1 w-10 rounded-full bg-trade-text/20" />
+          <div className="relative bg-trade-card rounded-t-3xl pb-10 shadow-2xl">
+            {/* Handle */}
+            <div className="flex justify-center pt-3 pb-2">
+              <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
             </div>
+
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-trade-text/10">
-              <span className="text-[15px] font-semibold text-trade-text">Order Type</span>
+            <div className="flex items-center justify-between px-5 pt-1 pb-4">
+              <div>
+                <p className="text-[11px] text-trade-text-muted uppercase tracking-widest font-medium">Select</p>
+                <p className="text-[18px] font-bold text-trade-text leading-tight">Order Type</p>
+              </div>
               <button
                 onClick={() => setOrderTypeSheetOpen(false)}
-                className="h-7 w-7 flex items-center justify-center rounded-full bg-trade-text/10 active:opacity-60"
+                className="h-8 w-8 flex items-center justify-center rounded-full bg-trade-text/8 active:scale-95 transition-transform"
               >
-                <X className="h-4 w-4 text-trade-text" />
+                <X className="h-[15px] w-[15px] text-trade-text/70" />
               </button>
             </div>
-            {/* Options */}
-            <div className="flex flex-col">
-              {ORDER_TYPES.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => {
-                    setOrderType(type);
-                    setOrderTypeSheetOpen(false);
-                  }}
-                  className="flex items-center justify-between px-5 py-[14px] active:opacity-60 transition-opacity"
-                >
-                  <span
-                    className={`text-[15px] ${
-                      orderType === type ? "text-trade-text font-semibold" : "text-trade-text-muted font-normal"
+
+            {/* 2-column grid */}
+            <div className="px-4 grid grid-cols-2 gap-3 pb-2">
+              {ORDER_TYPES.map(({ label, desc }) => {
+                const active = orderType === label;
+                return (
+                  <button
+                    key={label}
+                    onClick={() => { setOrderType(label); setOrderTypeSheetOpen(false); }}
+                    className={`relative flex flex-col items-start text-left rounded-2xl px-4 py-4 transition-all active:scale-[0.97] ${
+                      active
+                        ? "bg-trade-primary/15 ring-1 ring-trade-primary/60"
+                        : "bg-trade-text/5 ring-1 ring-transparent"
                     }`}
                   >
-                    {type}
-                  </span>
-                  {orderType === type && (
-                    <Check className="h-4 w-4 text-trade-text" />
-                  )}
-                </button>
-              ))}
+                    {active && (
+                      <span className="absolute top-3 right-3 h-[18px] w-[18px] rounded-full bg-trade-primary flex items-center justify-center">
+                        <Check className="h-[10px] w-[10px] text-trade-primary-text" strokeWidth={3} />
+                      </span>
+                    )}
+                    <span className={`text-[14px] font-semibold mb-0.5 ${active ? "text-trade-text" : "text-trade-text/80"}`}>
+                      {label}
+                    </span>
+                    <span className="text-[11px] text-trade-text-muted leading-snug">{desc}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>,
