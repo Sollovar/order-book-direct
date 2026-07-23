@@ -196,26 +196,23 @@ function Index() {
         {statsOpen && (
           <div className="border-t border-trade-text/5 px-3 pt-3 pb-3 grid grid-cols-2 gap-x-4 gap-y-4">
             <StatCell
-              label="Mark / Oracle"
-              value="66,009.1 / 66,008.6"
-            />
-            <StatCell
-              label="24h Volume"
-              value="$2,847,391,204"
-            />
-            <StatCell
-              label="Open Interest"
-              value="$1,315,891,490"
+              label="Exchange Price"
+              value="66,009.1"
             />
             <div>
               <div className="text-[11px] text-trade-text-muted border-b border-dashed border-trade-text/15 pb-0.5 mb-1">
-                Funding / Countdown
+                Price Change
               </div>
-              <div className="flex items-center gap-2 text-[13px]">
-                <span className="text-trade-bid font-medium">0.0013%</span>
-                <span className="text-trade-text/70 tabular-nums">{fmtCountdown(countdown)}</span>
-              </div>
+              <div className="text-[13px] text-trade-ask font-medium">-342.6 / -0.52%</div>
             </div>
+            <StatCell
+              label="24h High"
+              value="67,245.0"
+            />
+            <StatCell
+              label="24h Low"
+              value="65,102.3"
+            />
           </div>
         )}
       </div>
