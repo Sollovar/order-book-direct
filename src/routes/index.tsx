@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ChevronDown,
   Menu,
@@ -576,24 +577,32 @@ function Index() {
         })}
       </nav>
 
-      {/* Order Type Bottom Sheet */}
-      {orderTypeSheetOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+      {/* Order Type Bottom Sheet — rendered via portal to escape stacking contexts */}
+      {orderTypeSheetOpen && typeof document !== "undefined" && createPortal(
+        <div className="fixed inset-0 flex flex-col justify-end" style={{ zIndex: 9999 }}>
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-black/70"
             onClick={() => setOrderTypeSheetOpen(false)}
           />
           {/* Sheet */}
-          <div className="relative bg-trade-surface rounded-t-2xl pb-8 z-10">
+          <div
+            className="relative rounded-t-2xl pb-10"
+            style={{ backgroundColor: "var(--color-trade-surface, #1c1c1e)" }}
+          >
+            {/* Handle bar */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="h-1 w-10 rounded-full bg-white/20" />
+            </div>
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-trade-text/10">
-              <span className="text-[15px] font-medium text-trade-text">Order Type</span>
+            <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
+              <span className="text-[15px] font-semibold text-white">Order Type</span>
               <button
                 onClick={() => setOrderTypeSheetOpen(false)}
-                className="h-7 w-7 flex items-center justify-center rounded-full bg-trade-text/10 active:opacity-60"
+                className="h-7 w-7 flex items-center justify-center rounded-full active:opacity-60"
+                style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
               >
-                <X className="h-4 w-4 text-trade-text" />
+                <X className="h-4 w-4 text-white" />
               </button>
             </div>
             {/* Options */}
@@ -605,25 +614,24 @@ function Index() {
                     setOrderType(type);
                     setOrderTypeSheetOpen(false);
                   }}
-                  className="flex items-center justify-between px-5 py-4 active:bg-trade-text/5 transition-colors"
+                  className="flex items-center justify-between px-5 py-[14px] active:opacity-60 transition-opacity"
                 >
                   <span
                     className={`text-[15px] ${
-                      orderType === type
-                        ? "text-trade-text font-semibold"
-                        : "text-trade-text/70 font-normal"
+                      orderType === type ? "text-white font-semibold" : "text-white/60 font-normal"
                     }`}
                   >
                     {type}
                   </span>
                   {orderType === type && (
-                    <Check className="h-4 w-4 text-trade-text" />
+                    <Check className="h-4 w-4 text-white" />
                   )}
                 </button>
               ))}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>
