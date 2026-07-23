@@ -139,12 +139,8 @@ function Index() {
         <div className="grid grid-cols-2 gap-3 mt-3">
           {/* LEFT: order book */}
           <div>
-            <div className="text-[11px] text-trade-text-muted border-b border-dashed border-trade-text/15 pb-1">
-              Funding (8h) / Countdown
-            </div>
-            <div className="text-[12px] mt-1">0.0043% / 07:45:54</div>
+            <div className="flex items-center justify-between text-[10px] text-trade-text-muted">
 
-            <div className="flex items-center justify-between text-[10px] text-trade-text-muted mt-3">
               <div>
                 Price
                 <div>(USDT)</div>
