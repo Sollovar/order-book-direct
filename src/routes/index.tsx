@@ -130,6 +130,27 @@ function Index() {
         </div>
       </header>
 
+      {/* Pair header */}
+      <div className="mx-1 mb-2 rounded-xl bg-trade-card border border-trade-text/5 px-3 py-2.5 flex items-center justify-between">
+        {/* Left: icon + symbol + leverage */}
+        <div className="flex items-center gap-2">
+          <div className="h-7 w-7 rounded-full bg-[#f7931a] flex items-center justify-center text-white font-bold text-[13px] shadow-sm">
+            ₿
+          </div>
+          <span className="text-trade-text font-semibold text-[15px] tracking-tight">BTC</span>
+          <span className="rounded-md bg-trade-surface border border-trade-text/10 text-trade-text/60 text-[11px] px-1.5 py-0.5 font-medium">
+            20x
+          </span>
+        </div>
+
+        {/* Right: price + change + dropdown */}
+        <div className="flex items-center gap-2">
+          <span className="text-trade-text font-medium text-[15px]">66,007.4</span>
+          <span className="text-trade-ask text-[13px] font-medium">-0.52%</span>
+          <ChevronDown className="h-4 w-4 text-trade-text/50" />
+        </div>
+      </div>
+
       {/* Main trading card */}
       <section className="mx-1 rounded-xl bg-trade-card border border-trade-text/5 p-3">
 
