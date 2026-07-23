@@ -59,6 +59,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-trade-bg: var(--trade-bg);
+  --color-trade-card: var(--trade-card);
+  --color-trade-text: var(--trade-text);
+  --color-trade-text-muted: var(--trade-text-muted);
+  --color-trade-border: var(--trade-border);
+  --color-trade-surface: var(--trade-surface);
+  --color-trade-ask: var(--trade-ask);
+  --color-trade-bid: var(--trade-bid);
+  --color-trade-primary: var(--trade-primary);
+  --color-trade-primary-text: var(--trade-primary-text);
 }
 
 :root {
