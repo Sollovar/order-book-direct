@@ -9,6 +9,8 @@ import {
   Link2,
   Sun,
   Moon,
+  BarChart2,
+  UserCircle,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -56,6 +58,7 @@ function Index() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [hasManualOverride, setHasManualOverride] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
+  const [navTab, setNavTab] = useState("Trade");
   const [countdown, setCountdown] = useState(39 * 60 + 58); // seconds
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
@@ -122,7 +125,7 @@ function Index() {
 
   return (
     <div
-      className={`min-h-screen bg-trade-bg text-trade-text font-sans text-[13px] pb-4 ${
+      className={`min-h-screen bg-trade-bg text-trade-text font-sans text-[13px] pb-20 ${
         theme === "dark" ? "dark" : ""
       }`}
     >
@@ -384,6 +387,47 @@ function Index() {
         </div>
       </section>
 
+      {/* Bottom nav — Hyperliquid style */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0d1117] border-t border-white/[0.06] flex items-center justify-around px-8 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+        {[
+          {
+            label: "Markets",
+            icon: (active: boolean) => (
+              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#4fffb0]" : "text-white/50"}`} />
+            ),
+          },
+          {
+            label: "Trade",
+            icon: (active: boolean) => (
+              /* Two overlapping circles — Hyperliquid logo mark */
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle cx="6.5" cy="9" r="5.5" fill={active ? "#4fffb0" : "rgba(255,255,255,0.35)"} />
+                <circle cx="11.5" cy="9" r="5.5" fill={active ? "#4fffb0" : "rgba(255,255,255,0.35)"} fillOpacity="0.65" />
+              </svg>
+            ),
+          },
+          {
+            label: "Account",
+            icon: (active: boolean) => (
+              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#4fffb0]" : "text-white/50"}`} />
+            ),
+          },
+        ].map(({ label, icon }) => {
+          const active = navTab === label;
+          return (
+            <button
+              key={label}
+              onClick={() => setNavTab(label)}
+              className="flex items-center gap-2 transition-opacity active:opacity-60"
+            >
+              {icon(active)}
+              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#4fffb0]" : "text-white/50"}`}>
+                {label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
 
     </div>
   );
