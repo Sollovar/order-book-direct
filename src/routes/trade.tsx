@@ -411,7 +411,7 @@ function Index() {
                 onClick={() => setTickSheetOpen(true)}
                 className="flex items-center gap-1 text-trade-text/70 text-[12px] active:opacity-60 transition-opacity"
               >
-                {tickSize} <ChevronDown className="h-3 w-3" />
+                {tickSize} <span className="text-[8px] leading-none">▼</span>
               </button>
             </div>
           </div>
