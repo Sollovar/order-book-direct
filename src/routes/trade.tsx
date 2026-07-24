@@ -17,7 +17,7 @@ import {
   Check,
 } from "lucide-react";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/trade")({
   head: () => ({
     meta: [
       { title: "BTCUSDT Perp — Order Book | AsterDex" },
