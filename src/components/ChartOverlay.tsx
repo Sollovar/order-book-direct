@@ -383,7 +383,7 @@ export function ChartOverlay({
         </div>
 
         {/* ── OPEN ORDERS — separate card, same as trade page bottom section ── */}
-        <section className="rounded-xl bg-trade-card border border-trade-text/5">
+        <section className="rounded-2xl bg-trade-card border border-trade-text/5">
           <div className="flex items-center justify-between border-b border-trade-text/5 px-3">
             <div className="flex items-center justify-between flex-1">
               {bottomTabs.map(t => (
