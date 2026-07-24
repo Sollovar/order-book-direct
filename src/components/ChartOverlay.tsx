@@ -251,7 +251,7 @@ export function ChartOverlay({
         <div className="rounded-2xl bg-trade-card border border-trade-text/5 overflow-hidden">
 
           {/* Pair header */}
-          <div className="px-3 pt-3 pb-2.5 border-b border-trade-text/5">
+          <div className="px-3 pt-3 pb-2.5">
             {/* Row 1: symbol + star */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -282,17 +282,17 @@ export function ChartOverlay({
                   Last price 63,911.9
                 </div>
               </div>
-              <div className="text-right text-[11px] space-y-1">
-                <div className="flex gap-4 justify-end">
-                  <span className="text-trade-text-muted">24h Vol (USDT)</span>
-                  <span className="text-trade-text-muted">OI (USDT)</span>
+              <div className="text-right space-y-0.5">
+                <div className="flex gap-3 justify-end text-[9px] text-trade-text-muted">
+                  <span>24h Vol (USDT)</span>
+                  <span>OI (USDT)</span>
                 </div>
-                <div className="flex gap-6 justify-end">
+                <div className="flex gap-4 justify-end text-[10px]">
                   <span className="text-trade-text/80 font-medium">850.72M</span>
                   <span className="text-trade-text/80 font-medium">768.73M</span>
                 </div>
-                <div className="text-trade-text-muted">Funding (8h) / Countdown</div>
-                <div className="text-trade-text/80 font-medium">
+                <div className="text-[9px] text-trade-text-muted">Funding (8h) / Countdown</div>
+                <div className="text-[10px] text-trade-text/80 font-medium">
                   0.0076% / {fmtCountdown(countdown)}
                 </div>
               </div>
@@ -300,7 +300,7 @@ export function ChartOverlay({
           </div>
 
           {/* Chart tab bar — "Chart" has filled pill style */}
-          <div className="flex items-center gap-1 px-3 pt-2.5 pb-0 overflow-x-auto border-b border-trade-text/5">
+          <div className="flex items-center gap-1 px-3 pt-2.5 pb-0 overflow-x-auto">
             {chartTabs.map(t => (
               <button
                 key={t}
@@ -317,7 +317,7 @@ export function ChartOverlay({
           </div>
 
           {/* Timeframe row */}
-          <div className="flex items-center justify-between px-3 py-2 border-b border-trade-text/5">
+          <div className="flex items-center justify-between px-3 py-2">
             <div className="flex items-center gap-4">
               {timeframes.map(tf => (
                 <button
