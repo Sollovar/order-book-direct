@@ -300,7 +300,7 @@ export function ChartOverlay({
           </div>
 
           {/* Chart tab bar — "Chart" has filled pill style */}
-          <div className="flex items-center gap-1 px-3 pt-2.5 pb-0 overflow-x-auto">
+          <div className="flex items-center gap-1 px-3 pt-2.5 pb-0 overflow-x-auto bg-trade-surface/30">
             {chartTabs.map(t => (
               <button
                 key={t}
@@ -317,7 +317,7 @@ export function ChartOverlay({
           </div>
 
           {/* Timeframe row */}
-          <div className="flex items-center justify-between px-3 py-2">
+          <div className="flex items-center justify-between px-3 py-2 bg-trade-surface/30">
             <div className="flex items-center gap-4">
               {timeframes.map(tf => (
                 <button
