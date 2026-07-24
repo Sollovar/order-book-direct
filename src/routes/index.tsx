@@ -91,12 +91,9 @@ function Index() {
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
   const ORDER_TYPES: { label: string; desc: string }[] = [
-    { label: "Limit",       desc: "Set your price" },
-    { label: "Market",      desc: "Fill instantly" },
-    { label: "Take Profit", desc: "Lock in gains" },
-    { label: "Stop Loss",   desc: "Cap your risk" },
-    { label: "Post Only",   desc: "Maker only" },
-    { label: "Ladder",      desc: "Split entries" },
+    { label: "Limit",  desc: "Set your price" },
+    { label: "Market", desc: "Fill instantly" },
+    { label: "Ladder", desc: "Split entries" },
   ];
 
   useEffect(() => {
@@ -326,17 +323,28 @@ function Index() {
               {orderType} <span className="text-[8px] leading-none">▼</span>
             </button>
 
-            <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
-              <div>
-                <div className="text-[10px] text-trade-text-muted">Order price</div>
-                <div className="text-[14px]">66015.6</div>
+            {orderType !== "Market" && (
+              <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] text-trade-text-muted">Order price</div>
+                  <div className="text-[14px]">66015.6</div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-[11px] text-trade-text/70 px-1.5">USDT</span>
+                  <span className="text-trade-text/20">|</span>
+                  <span className="text-[11px] text-trade-text/70 px-1.5">BBO</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-[11px] text-trade-text/70 px-1.5">USDT</span>
-                <span className="text-trade-text/20">|</span>
-                <span className="text-[11px] text-trade-text/70 px-1.5">BBO</span>
+            )}
+            {orderType === "Market" && (
+              <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] text-trade-text-muted">Order price</div>
+                  <div className="text-[14px] text-trade-text-muted italic">Market</div>
+                </div>
+                <span className="text-[11px] text-trade-text/40">Best available</span>
               </div>
-            </div>
+            )}
 
             <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
               <div className="text-[12px] text-trade-text/40">Size</div>
@@ -379,7 +387,7 @@ function Index() {
               <div className="flex items-center justify-between text-[12px] text-trade-text/70">
                 <label className="flex items-center gap-2">
                   <span className="h-3.5 w-3.5 rounded-sm border border-trade-text/30" />
-                  <span className="border-b border-dashed border-trade-text/20">Reduce-Only</span>
+                  <span className="border-b border-dashed border-trade-text/20">Post Only</span>
                 </label>
                 <span className="flex items-center gap-1">
                   GTC <ChevronDown className="h-3 w-3" />
