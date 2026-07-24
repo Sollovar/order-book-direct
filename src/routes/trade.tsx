@@ -736,6 +736,7 @@ function Index() {
           if (t !== "Markets") setChartOpen(false);
         }}
         onOpenChart={() => setChartOpen(true)}
+        onOpenMenu={() => setMenuOpen(true)}
       />
 
       {/* Mobile Menu Bottom Sheet */}

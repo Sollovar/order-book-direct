@@ -176,6 +176,7 @@ export interface ChartOverlayProps {
   navTab: string;
   setNavTab: (t: string) => void;
   onOpenChart: () => void;
+  onOpenMenu: () => void;
 }
 
 /* ─── Main component ────────────────────────────────── */
@@ -187,6 +188,7 @@ export function ChartOverlay({
   navTab,
   setNavTab,
   onOpenChart,
+  onOpenMenu,
 }: ChartOverlayProps) {
   const [chartTab, setChartTab] = useState("Chart");
   const [timeframe, setTimeframe] = useState("1D");
@@ -252,7 +254,11 @@ export function ChartOverlay({
             )}
           </button>
           {/* Hamburger */}
-          <button className="h-8 w-8 flex items-center justify-center" aria-label="Menu">
+          <button
+            onClick={onOpenMenu}
+            className="h-8 w-8 flex items-center justify-center active:opacity-60 transition-opacity"
+            aria-label="Menu"
+          >
             <Menu className="h-5 w-5 text-trade-text/80" />
           </button>
         </div>
