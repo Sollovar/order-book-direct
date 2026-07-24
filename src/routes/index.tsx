@@ -90,6 +90,9 @@ function Index() {
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
+  const [ladderPriceStart, setLadderPriceStart] = useState("");
+  const [ladderPriceEnd, setLadderPriceEnd] = useState("");
+  const [ladderLevels, setLadderLevels] = useState(5);
   const ORDER_TYPES: { label: string; desc: string }[] = [
     { label: "Limit",  desc: "Set your price" },
     { label: "Market", desc: "Fill instantly" },
@@ -323,7 +326,8 @@ function Index() {
               {orderType} <span className="text-[8px] leading-none">▼</span>
             </button>
 
-            {orderType !== "Market" && (
+            {/* Price box — Limit only */}
+            {orderType === "Limit" && (
               <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
                 <div>
                   <div className="text-[10px] text-trade-text-muted">Order price</div>
@@ -336,14 +340,56 @@ function Index() {
                 </div>
               </div>
             )}
-            {orderType === "Market" && (
-              <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-trade-text-muted">Order price</div>
-                  <div className="text-[14px] text-trade-text-muted italic">Market</div>
+
+            {/* Ladder fields — Price Start, Price End, Levels */}
+            {orderType === "Ladder" && (
+              <>
+                <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-[10px] text-trade-text-muted mb-0.5">Price Start</div>
+                    <input
+                      type="number"
+                      value={ladderPriceStart}
+                      onChange={e => setLadderPriceStart(e.target.value)}
+                      placeholder="0.00"
+                      className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                    />
+                  </div>
+                  <span className="text-[11px] text-trade-text/50 ml-2">USDT</span>
                 </div>
-                <span className="text-[11px] text-trade-text/40">Best available</span>
-              </div>
+
+                <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-[10px] text-trade-text-muted mb-0.5">Price End</div>
+                    <input
+                      type="number"
+                      value={ladderPriceEnd}
+                      onChange={e => setLadderPriceEnd(e.target.value)}
+                      placeholder="0.00"
+                      className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                    />
+                  </div>
+                  <span className="text-[11px] text-trade-text/50 ml-2">USDT</span>
+                </div>
+
+                <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-[10px] text-trade-text-muted mb-0.5">Levels</div>
+                    <div className="flex items-center gap-3 mt-1">
+                      <button
+                        onClick={() => setLadderLevels(l => Math.max(1, l - 1))}
+                        className="h-6 w-6 rounded-full bg-trade-text/10 flex items-center justify-center text-trade-text text-[14px] font-bold active:opacity-60"
+                      >−</button>
+                      <span className="text-[14px] text-trade-text font-semibold w-6 text-center">{ladderLevels}</span>
+                      <button
+                        onClick={() => setLadderLevels(l => Math.min(50, l + 1))}
+                        className="h-6 w-6 rounded-full bg-trade-text/10 flex items-center justify-center text-trade-text text-[14px] font-bold active:opacity-60"
+                      >+</button>
+                    </div>
+                  </div>
+                  <span className="text-[11px] text-trade-text/50">1 – 50</span>
+                </div>
+              </>
             )}
 
             <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
