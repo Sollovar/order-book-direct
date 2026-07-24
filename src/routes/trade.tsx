@@ -17,6 +17,16 @@ import {
   Bell,
   Settings,
   Menu,
+  TrendingUp,
+  Activity,
+  ArrowLeftRight,
+  PieChart,
+  Trophy,
+  Users,
+  Github,
+  Twitter,
+  MessageCircle,
+  ChevronRight,
 } from "lucide-react";
 import { PAIRS } from "../lib/pairs";
 
@@ -77,6 +87,7 @@ function Index() {
   const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [ladderPriceStart, setLadderPriceStart] = useState("");
   const [ladderPriceEnd, setLadderPriceEnd] = useState("");
   const [ladderLevels, setLadderLevels] = useState(5);
@@ -199,7 +210,11 @@ function Index() {
             )}
           </button>
           {/* Hamburger */}
-          <button className="h-8 w-8 flex items-center justify-center" aria-label="Menu">
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="h-8 w-8 flex items-center justify-center active:opacity-60 transition-opacity"
+            aria-label="Menu"
+          >
             <Menu className="h-5 w-5 text-trade-text/80" />
           </button>
         </div>
@@ -640,6 +655,12 @@ function Index() {
         onOpenChart={() => setChartOpen(true)}
       />
 
+      {/* Mobile Menu Bottom Sheet */}
+      {menuOpen && typeof document !== "undefined" && createPortal(
+        <MobileMenuSheet onClose={() => setMenuOpen(false)} theme={theme} />,
+        document.body
+      )}
+
       {/* Order Type Bottom Sheet — rendered via portal to escape stacking contexts */}
       {orderTypeSheetOpen && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 flex flex-col justify-end" style={{ zIndex: 9999 }}>
@@ -745,6 +766,162 @@ function StatCell({ label, value }: { label: string; value: string }) {
         {label}
       </div>
       <div className="text-[13px] text-trade-text font-medium">{value}</div>
+    </div>
+  );
+}
+
+/* ─── Mobile Menu Bottom Sheet ─────────────────────────────────────────────── */
+
+const APP_ITEMS = [
+  { label: "Trade",       icon: TrendingUp,     href: "/trade" },
+  { label: "Markets",     icon: BarChart2,       href: "/trade" },
+  { label: "Portfolio",   icon: Wallet,          href: "/trade" },
+  { label: "Leaderboard", icon: Trophy,          href: "/trade" },
+];
+
+const PRODUCT_ITEMS = [
+  { label: "Perpetuals",  icon: Activity,        href: "/trade" },
+  { label: "Spot",        icon: ArrowLeftRight,  href: "/trade" },
+  { label: "Referrals",   icon: Users,           href: "/trade" },
+  { label: "Analytics",   icon: PieChart,        href: "/trade" },
+];
+
+const COLLAPSIBLE_SECTIONS = ["Protocol", "Company", "Legal & Privacy"];
+
+function MobileMenuSheet({ onClose, theme }: { onClose: () => void; theme: "light" | "dark" }) {
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  return (
+    <div className={`fixed inset-0 flex flex-col justify-end ${theme === "dark" ? "dark" : ""}`} style={{ zIndex: 9999 }}>
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+        onClick={onClose}
+      />
+
+      {/* Sheet */}
+      <div className="relative bg-trade-card rounded-t-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
+        style={{ paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))" }}
+      >
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+          aria-label="Close menu"
+        >
+          <X className="h-[15px] w-[15px] text-trade-text/70" />
+        </button>
+
+        <div className="px-5 pt-3 pb-2">
+
+          {/* App section */}
+          <p className="text-[12px] text-trade-text-muted font-medium mb-3">App</p>
+          <div className="space-y-1 mb-6">
+            {APP_ITEMS.map(({ label, icon: Icon }) => (
+              <button
+                key={label}
+                onClick={onClose}
+                className="w-full flex items-center gap-3.5 py-2.5 active:opacity-60 transition-opacity"
+              >
+                <span className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: "rgba(240,185,11,0.12)" }}>
+                  <Icon className="h-4 w-4" style={{ color: "#f0b90b" }} />
+                </span>
+                <span className="text-[16px] font-medium text-trade-text">{label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Products section */}
+          <p className="text-[12px] text-trade-text-muted font-medium mb-3">Products</p>
+          <div className="space-y-1 mb-6">
+            {PRODUCT_ITEMS.map(({ label, icon: Icon }) => (
+              <button
+                key={label}
+                onClick={onClose}
+                className="w-full flex items-center gap-3.5 py-2.5 active:opacity-60 transition-opacity"
+              >
+                <span className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: "rgba(240,185,11,0.12)" }}>
+                  <Icon className="h-4 w-4" style={{ color: "#f0b90b" }} />
+                </span>
+                <span className="text-[16px] font-medium text-trade-text">{label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-trade-text/8 mb-4" />
+
+          {/* Collapsible sections */}
+          <div className="space-y-0">
+            {COLLAPSIBLE_SECTIONS.map((section) => {
+              const isOpen = openSection === section;
+              return (
+                <button
+                  key={section}
+                  onClick={() => setOpenSection(isOpen ? null : section)}
+                  className="w-full flex items-center justify-between py-3.5 active:opacity-60 transition-opacity"
+                >
+                  <span className="text-[15px] text-trade-text-muted font-medium">{section}</span>
+                  <ChevronRight
+                    className="h-4 w-4 text-trade-text/40 transition-transform duration-200"
+                    style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-trade-text/8 mt-4 mb-5" />
+
+          {/* Social icons */}
+          <div className="flex items-center justify-between px-1">
+            <button
+              className="h-9 w-9 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+              aria-label="Help"
+            >
+              <span className="text-[14px] font-bold text-trade-text-muted">?</span>
+            </button>
+            <div className="flex items-center gap-3">
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+                aria-label="GitHub"
+              >
+                <Github className="h-[18px] w-[18px] text-trade-text/70" />
+              </a>
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+                aria-label="X / Twitter"
+              >
+                <Twitter className="h-[18px] w-[18px] text-trade-text/70" />
+              </a>
+              <a
+                href="https://discord.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-9 w-9 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+                aria-label="Discord"
+              >
+                <MessageCircle className="h-[18px] w-[18px] text-trade-text/70" />
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }
