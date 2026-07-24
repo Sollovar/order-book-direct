@@ -89,6 +89,7 @@ function Index() {
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookVisible, setBookVisible] = useState(true);
+  const [bookFilter, setBookFilter] = useState<"both" | "bids" | "asks">("both");
   const [ladderPriceStart, setLadderPriceStart] = useState("");
   const [ladderPriceEnd, setLadderPriceEnd] = useState("");
   const [ladderLevels, setLadderLevels] = useState(5);
@@ -325,12 +326,14 @@ function Index() {
               </div>
             </div>
 
-            {/* Asks */}
-            <div className="mt-1 space-y-[3px]">
-              {asks.map((r, i) => (
-                <BookRow key={i} row={r} side="ask" />
-              ))}
-            </div>
+            {/* Asks — hidden when bids-only */}
+            {bookFilter !== "bids" && (
+              <div className="mt-1 space-y-[3px]">
+                {asks.map((r, i) => (
+                  <BookRow key={i} row={r} side="ask" />
+                ))}
+              </div>
+            )}
 
             {/* Mid price */}
             <div className="my-2 border-y border-dashed border-trade-text/10 py-1.5">
@@ -340,20 +343,68 @@ function Index() {
               <div className="text-trade-text-muted text-[11px]">$66,008.9</div>
             </div>
 
-            {/* Bids */}
-            <div className="space-y-[3px]">
-              {bids.map((r, i) => (
-                <BookRow key={i} row={r} side="bid" />
-              ))}
-            </div>
-
-            <div className="flex items-center justify-between mt-3">
-              <div className="grid grid-cols-2 gap-0.5">
-                <div className="h-2 w-2 rounded-sm bg-trade-bid" />
-                <div className="h-2 w-3 bg-trade-text/40 rounded-sm" />
-                <div className="h-2 w-2 rounded-sm bg-trade-ask" />
-                <div className="h-2 w-3 bg-trade-text/40 rounded-sm" />
+            {/* Bids — hidden when asks-only */}
+            {bookFilter !== "asks" && (
+              <div className="space-y-[3px]">
+                {bids.map((r, i) => (
+                  <BookRow key={i} row={r} side="bid" />
+                ))}
               </div>
+            )}
+
+            {/* Filter buttons + depth selector */}
+            <div className="flex items-center justify-between mt-3">
+              {/* Three view-mode buttons */}
+              <div className="flex items-center gap-1">
+                {/* Bids only */}
+                <button
+                  onClick={() => setBookFilter("bids")}
+                  className={`flex flex-col gap-[3px] p-1.5 rounded-md transition-colors ${bookFilter === "bids" ? "bg-trade-bid/15" : "hover:bg-trade-text/5"}`}
+                  aria-label="Show bids only"
+                >
+                  <div className="flex gap-[3px]">
+                    <div className="h-[5px] w-[5px] rounded-[1px] bg-trade-bid" />
+                    <div className="h-[5px] w-[7px] rounded-[1px] bg-trade-bid/40" />
+                  </div>
+                  <div className="flex gap-[3px]">
+                    <div className="h-[5px] w-[5px] rounded-[1px] bg-trade-bid" />
+                    <div className="h-[5px] w-[7px] rounded-[1px] bg-trade-bid/40" />
+                  </div>
+                </button>
+
+                {/* Both */}
+                <button
+                  onClick={() => setBookFilter("both")}
+                  className={`flex flex-col gap-[3px] p-1.5 rounded-md transition-colors ${bookFilter === "both" ? "bg-trade-text/10" : "hover:bg-trade-text/5"}`}
+                  aria-label="Show both"
+                >
+                  <div className="flex gap-[3px]">
+                    <div className="h-[5px] w-[5px] rounded-[1px] bg-trade-ask" />
+                    <div className="h-[5px] w-[7px] rounded-[1px] bg-trade-ask/40" />
+                  </div>
+                  <div className="flex gap-[3px]">
+                    <div className="h-[5px] w-[5px] rounded-[1px] bg-trade-bid" />
+                    <div className="h-[5px] w-[7px] rounded-[1px] bg-trade-bid/40" />
+                  </div>
+                </button>
+
+                {/* Asks only */}
+                <button
+                  onClick={() => setBookFilter("asks")}
+                  className={`flex flex-col gap-[3px] p-1.5 rounded-md transition-colors ${bookFilter === "asks" ? "bg-trade-ask/15" : "hover:bg-trade-text/5"}`}
+                  aria-label="Show asks only"
+                >
+                  <div className="flex gap-[3px]">
+                    <div className="h-[5px] w-[5px] rounded-[1px] bg-trade-ask" />
+                    <div className="h-[5px] w-[7px] rounded-[1px] bg-trade-ask/40" />
+                  </div>
+                  <div className="flex gap-[3px]">
+                    <div className="h-[5px] w-[5px] rounded-[1px] bg-trade-ask" />
+                    <div className="h-[5px] w-[7px] rounded-[1px] bg-trade-ask/40" />
+                  </div>
+                </button>
+              </div>
+
               <button className="flex items-center gap-1 text-trade-text/70 text-[12px]">
                 0.1 <ChevronDown className="h-3 w-3" />
               </button>
