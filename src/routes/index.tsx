@@ -95,6 +95,8 @@ function Index() {
   const [ladderLevels, setLadderLevels] = useState(5);
   const [limitPrice, setLimitPrice] = useState("");
   const [orderSize, setOrderSize] = useState("");
+  const [sliderPct, setSliderPct] = useState(0);
+  const availableBalance = 0; // replace with real balance when connected
   const [tpslEnabled, setTpslEnabled] = useState(false);
   const [tpPrice, setTpPrice] = useState("");
   const [slPrice, setSlPrice] = useState("");
@@ -431,27 +433,52 @@ function Index() {
             </div>
 
             {/* Slider */}
-            <div className="py-2">
-              <div className="relative h-[2px] bg-trade-text/10 rounded-full">
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-trade-text border border-trade-text/60" />
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="absolute top-1/2 -translate-y-1/2 h-1 w-1 rounded-full bg-trade-text/30"
-                    style={{ left: `${i * 20 + 5}%` }}
-                  />
-                ))}
+            <div className="py-2 px-1">
+              <div className="relative">
+                <style>{`
+                  .gold-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 2px; border-radius: 9999px; outline: none; background: transparent; }
+                  .gold-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 9999px; background: #f0b90b; cursor: pointer; border: 2px solid #f0b90b; box-shadow: 0 0 0 3px rgba(240,185,11,0.15); }
+                  .gold-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 9999px; background: #f0b90b; cursor: pointer; border: 2px solid #f0b90b; }
+                `}</style>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={sliderPct}
+                  onChange={e => {
+                    const pct = Number(e.target.value);
+                    setSliderPct(pct);
+                    const filled = ((availableBalance * pct) / 100);
+                    setOrderSize(filled > 0 ? filled.toFixed(2) : "");
+                  }}
+                  className="gold-slider"
+                  style={{
+                    background: `linear-gradient(to right, #f0b90b ${sliderPct}%, rgba(128,128,128,0.2) ${sliderPct}%)`,
+                  }}
+                />
+                {/* Tick marks at 25 / 50 / 75 */}
+                <div className="flex justify-between mt-1 px-[1px]">
+                  {["25%", "50%", "75%", "100%"].map((label, i) => (
+                    <button
+                      key={label}
+                      onClick={() => {
+                        const pct = (i + 1) * 25;
+                        setSliderPct(pct);
+                        const filled = ((availableBalance * pct) / 100);
+                        setOrderSize(filled > 0 ? filled.toFixed(2) : "");
+                      }}
+                      className="text-[10px] text-trade-text-muted active:text-[#f0b90b] transition-colors"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             <div className="flex items-center justify-between text-[12px]">
               <span className="text-trade-text/60">Avbl</span>
-              <span className="flex items-center gap-1">
-                0.00 USDT
-                <span className="h-4 w-4 rounded-full border border-trade-primary/60 text-trade-primary flex items-center justify-center">
-                  <Plus className="h-2.5 w-2.5" />
-                </span>
-              </span>
+              <span className="text-trade-text/80">0.00 USDT</span>
             </div>
 
             {/* Toggles */}
