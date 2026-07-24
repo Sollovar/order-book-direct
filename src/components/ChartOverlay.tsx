@@ -251,7 +251,7 @@ export function ChartOverlay({
         <div className="rounded-2xl bg-trade-card border border-trade-text/5 overflow-hidden">
 
           {/* Pair header */}
-          <div className="px-3 pt-3 pb-2.5">
+          <div className="px-3 pt-3 pb-2.5 bg-trade-surface/30">
             {/* Row 1: symbol + star */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -368,10 +368,7 @@ export function ChartOverlay({
             )}
 
             {/* Time bar pinned to bottom of chart */}
-            <div
-              className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 py-1.5 text-[10px]"
-              style={{ background: "rgba(0,0,0,0.35)", borderTop: "1px solid rgba(255,255,255,0.04)" }}
-            >
+            <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 py-1.5 text-[10px] bg-trade-surface/30">
               <span className="font-mono text-trade-text-muted">
                 {new Date().toLocaleTimeString("en-GB", {
                   hour: "2-digit", minute: "2-digit", second: "2-digit",
