@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { ChartOverlay } from "../components/ChartOverlay";
 import {
   ChevronDown,
   Menu,
@@ -81,6 +82,7 @@ function Index() {
   const [hasManualOverride, setHasManualOverride] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
   const [navTab, setNavTab] = useState("Trade");
+  const [chartOpen, setChartOpen] = useState(false);
   const [pairsOpen, setPairsOpen] = useState(false);
   const [pairsSearch, setPairsSearch] = useState("");
   const [pairsCat, setPairsCat] = useState("Futures");
@@ -727,7 +729,10 @@ function Index() {
           return (
             <button
               key={label}
-              onClick={() => setNavTab(label)}
+              onClick={() => {
+                setNavTab(label);
+                if (label === "Markets") setChartOpen(true);
+              }}
               className="flex items-center gap-2 transition-opacity active:opacity-60"
             >
               {icon(active)}
@@ -738,6 +743,14 @@ function Index() {
           );
         })}
       </nav>
+
+      {/* Chart overlay — opens when Markets nav tab is tapped */}
+      <ChartOverlay
+        open={chartOpen}
+        onClose={() => { setChartOpen(false); setNavTab("Trade"); }}
+        theme={theme}
+        countdown={countdown}
+      />
 
       {/* Order Type Bottom Sheet — rendered via portal to escape stacking contexts */}
       {orderTypeSheetOpen && typeof document !== "undefined" && createPortal(
