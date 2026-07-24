@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import DesktopTrade from "@/components/desktop/DesktopTrade";
 import {
   ChevronDown,
   Menu,
@@ -167,6 +168,19 @@ function Index() {
     const sec = s % 60;
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   };
+
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  if (isDesktop) {
+    return <DesktopTrade theme={theme} onToggleTheme={toggleTheme} />;
+  }
 
   return (
     <div
