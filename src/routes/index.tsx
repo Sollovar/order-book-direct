@@ -344,7 +344,8 @@ function Index() {
                     value={limitPrice}
                     onChange={e => setLimitPrice(e.target.value)}
                     placeholder="0.00"
-                    className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                    className="w-full bg-transparent text-trade-text placeholder:text-trade-text/30 outline-none"
+                    style={{ fontSize: '16px' }}
                   />
                 </div>
                 <div className="flex items-center gap-1 ml-2 shrink-0">
@@ -367,7 +368,8 @@ function Index() {
                       value={ladderPriceStart}
                       onChange={e => setLadderPriceStart(e.target.value)}
                       placeholder="0.00"
-                      className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                      className="w-full bg-transparent text-trade-text placeholder:text-trade-text/30 outline-none"
+                      style={{ fontSize: '16px' }}
                     />
                   </div>
                   <span className="text-[11px] text-trade-text/50 ml-2 shrink-0">USDT</span>
@@ -382,7 +384,8 @@ function Index() {
                       value={ladderPriceEnd}
                       onChange={e => setLadderPriceEnd(e.target.value)}
                       placeholder="0.00"
-                      className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                      className="w-full bg-transparent text-trade-text placeholder:text-trade-text/30 outline-none"
+                      style={{ fontSize: '16px' }}
                     />
                   </div>
                   <span className="text-[11px] text-trade-text/50 ml-2 shrink-0">USDT</span>
@@ -418,7 +421,8 @@ function Index() {
                   value={orderSize}
                   onChange={e => setOrderSize(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
+                  className="w-full bg-transparent text-trade-text placeholder:text-trade-text/30 outline-none"
+                  style={{ fontSize: '16px' }}
                 />
               </div>
               <div className="flex items-center gap-1 ml-2 shrink-0 text-[12px] text-trade-text/70">
@@ -467,69 +471,54 @@ function Index() {
               {/* TP/SL trigger price inputs */}
               {tpslEnabled && (
                 <div className="space-y-1.5 pl-5">
-                  <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="text-[10px] text-trade-bid mb-0.5">Take Profit trigger</div>
-                      <input
-                        type="number"
-                        inputMode="decimal"
-                        value={tpPrice}
-                        onChange={e => setTpPrice(e.target.value)}
-                        placeholder="0.00"
-                        className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
-                      />
-                    </div>
-                    <span className="text-[11px] text-trade-text/50 ml-2 shrink-0">USDT</span>
+                  {/* Take Profit */}
+                  <div className="rounded-md bg-trade-surface flex items-center overflow-hidden">
+                    <span className="px-3 py-3 text-[12px] font-bold text-trade-text shrink-0">TP</span>
+                    <span className="text-trade-text/20 text-[13px]">|</span>
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      value={tpPrice}
+                      onChange={e => setTpPrice(e.target.value)}
+                      placeholder="Take Profit price"
+                      className="flex-1 bg-transparent text-trade-text/60 placeholder:text-trade-text/30 outline-none px-3 py-3"
+                      style={{ fontSize: '16px' }}
+                    />
+                    <span className="px-3 text-[12px] font-bold text-trade-text shrink-0">USDT</span>
                   </div>
-                  <div className="rounded-md bg-trade-surface p-2 flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="text-[10px] text-trade-ask mb-0.5">Stop Loss trigger</div>
-                      <input
-                        type="number"
-                        inputMode="decimal"
-                        value={slPrice}
-                        onChange={e => setSlPrice(e.target.value)}
-                        placeholder="0.00"
-                        className="w-full bg-transparent text-[14px] text-trade-text placeholder:text-trade-text/30 outline-none"
-                      />
-                    </div>
-                    <span className="text-[11px] text-trade-text/50 ml-2 shrink-0">USDT</span>
+                  {/* Stop Loss */}
+                  <div className="rounded-md bg-trade-surface flex items-center overflow-hidden">
+                    <span className="px-3 py-3 text-[12px] font-bold text-trade-text shrink-0">SL</span>
+                    <span className="text-trade-text/20 text-[13px]">|</span>
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      value={slPrice}
+                      onChange={e => setSlPrice(e.target.value)}
+                      placeholder="Stop Loss price"
+                      className="flex-1 bg-transparent text-trade-text/60 placeholder:text-trade-text/30 outline-none px-3 py-3"
+                      style={{ fontSize: '16px' }}
+                    />
+                    <span className="px-3 text-[12px] font-bold text-trade-text shrink-0">USDT</span>
                   </div>
                 </div>
               )}
 
-              {/* Hidden Order */}
+              {/* Post Only */}
               <button
-                onClick={() => setHiddenOrder(v => !v)}
+                onClick={() => setPostOnly(v => !v)}
                 className="flex items-center gap-2 text-[12px] text-trade-text/70 w-full text-left"
               >
-                <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${hiddenOrder ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
-                  {hiddenOrder && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
+                <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${postOnly ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
+                  {postOnly && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
                 </span>
-                <span className="border-b border-dashed border-trade-text/20">Hidden Order</span>
+                <span className="border-b border-dashed border-trade-text/20">Post Only</span>
               </button>
-
-              {/* Post Only + GTC */}
-              <div className="flex items-center justify-between text-[12px] text-trade-text/70">
-                <button
-                  onClick={() => setPostOnly(v => !v)}
-                  className="flex items-center gap-2 text-left"
-                >
-                  <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${postOnly ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
-                    {postOnly && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
-                  </span>
-                  <span className="border-b border-dashed border-trade-text/20">Post Only</span>
-                </button>
-                <span className="flex items-center gap-1">
-                  GTC <ChevronDown className="h-3 w-3" />
-                </span>
-              </div>
             </div>
 
-            <div className="space-y-1 pt-1 text-[12px]">
-              <Line label="Est. liq. price" value="-- USDT" />
-              <Line label="Margin" value="0.00 USDT" />
-              <Line label="Max" value="0.00 USDT" />
+            {/* Order value */}
+            <div className="pt-1 text-[12px]">
+              <Line label="Order value" value="0.00 USDT" />
             </div>
 
             <button className="w-full rounded-full bg-[#f0b90b] text-[#1a1200] py-2.5 text-[14px] font-bold mt-1 flex items-center justify-center gap-2">
