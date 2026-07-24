@@ -10,6 +10,7 @@ import {
   Link2,
   Search,
 } from "lucide-react";
+import { PairSelectorPanel } from "./PairSelectorPanel";
 
 /* ─── Seeded PRNG ────────────────────────────────────── */
 function seededRand(seed: number) {
@@ -187,6 +188,7 @@ export function ChartOverlay({
   const [chartTab, setChartTab] = useState("Chart");
   const [timeframe, setTimeframe] = useState("1D");
   const [bottomTab, setBottomTab] = useState("Open Orders");
+  const [pairsOpen, setPairsOpen] = useState(false);
 
   const currentPrice = 63934.3;
 
@@ -254,17 +256,14 @@ export function ChartOverlay({
           <div className="px-3 pt-3 pb-2.5 bg-trade-surface/30">
             {/* Row 1: symbol + star */}
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPairsOpen(true)}
+                className="flex items-center gap-2 active:opacity-70 transition-opacity"
+              >
                 <span className="text-trade-text font-bold text-[17px] tracking-tight">BTCUSDT</span>
-                <span
-                  className="text-[11px] px-1.5 py-0.5 rounded font-semibold"
-                  style={{ background: "rgba(240,185,11,0.15)", color: "#f0b90b" }}
-                >
-                  Perp
-                </span>
                 <ChevronDown className="h-3.5 w-3.5 text-trade-text/40" />
                 <span className="text-trade-ask text-[13px] font-medium">-1.32%</span>
-              </div>
+              </button>
               <Star className="h-4.5 w-4.5 text-trade-text/25" />
             </div>
 
@@ -456,6 +455,9 @@ export function ChartOverlay({
           );
         })}
       </nav>
+
+      {/* Pair selector panel */}
+      <PairSelectorPanel open={pairsOpen} onClose={() => setPairsOpen(false)} />
     </div>
   );
 }
