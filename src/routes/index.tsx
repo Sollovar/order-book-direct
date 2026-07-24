@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import DesktopTrade from "@/components/desktop/DesktopTrade";
 import {
   ChevronDown,
   Menu,
