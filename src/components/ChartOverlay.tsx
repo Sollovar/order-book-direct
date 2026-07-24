@@ -212,13 +212,10 @@ export function ChartOverlay({
 
   return (
     /* Full-screen backdrop — same bg as the trade page */
-    <div className="fixed inset-0 z-[70] bg-trade-bg overflow-y-auto px-3 pt-4 pb-24">
+    <div className="fixed inset-0 z-[70] bg-trade-bg overflow-y-auto px-2 pt-4 pb-24">
 
-      {/* ── ONE rounded card wrapping everything ── */}
-      <div
-        className="rounded-2xl overflow-hidden border border-trade-text/5"
-        style={{ background: "oklch(0.13 0 0)" }}
-      >
+      {/* ── ONE rounded card wrapping everything — matches trade-page panel style ── */}
+      <div className="rounded-xl bg-trade-card border border-trade-text/5 overflow-hidden">
 
         {/* ── Header ── */}
         <div className="px-4 pt-4 pb-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
@@ -318,7 +315,7 @@ export function ChartOverlay({
         </div>
 
         {/* ── Candlestick chart ── */}
-        <div className="relative" style={{ height: 300, background: "oklch(0.11 0 0)" }}>
+        <div className="relative bg-trade-card" style={{ height: 300 }}>
           {chartTab === "Chart" ? (
             <CandleChart candles={ALL_CANDLES.slice(-60)} currentPrice={currentPrice} />
           ) : (
