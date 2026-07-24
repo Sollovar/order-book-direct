@@ -104,6 +104,8 @@ function Index() {
   const [slPrice, setSlPrice] = useState("");
   const [hiddenOrder, setHiddenOrder] = useState(false);
   const [postOnly, setPostOnly] = useState(false);
+  const [expiryEnabled, setExpiryEnabled] = useState(false);
+  const [expiryMinutes, setExpiryMinutes] = useState("");
   const ORDER_TYPES: { label: string; desc: string }[] = [
     { label: "Limit",  desc: "Set your price" },
     { label: "Market", desc: "Fill instantly" },
@@ -635,6 +637,37 @@ function Index() {
                 </span>
                 <span className="border-b border-dashed border-trade-text/20">Post Only</span>
               </button>
+
+              {/* Expiry */}
+              <div className="space-y-1.5">
+                <button
+                  onClick={() => setExpiryEnabled(v => !v)}
+                  className="flex items-center gap-2 text-[12px] text-trade-text/70 w-full text-left"
+                >
+                  <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${expiryEnabled ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
+                    {expiryEnabled && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
+                  </span>
+                  <span className="border-b border-dashed border-trade-text/20">Expiry</span>
+                </button>
+
+                {expiryEnabled && (
+                  <div className="rounded-md bg-trade-surface flex items-center overflow-hidden">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      value={expiryMinutes}
+                      onChange={e => setExpiryMinutes(e.target.value)}
+                      placeholder="0"
+                      className="flex-1 bg-transparent text-trade-text placeholder:text-trade-text/30 outline-none px-3 py-2.5 text-[13px]"
+                      style={{ fontSize: '16px' }}
+                    />
+                    <span className="px-3 text-[11px] font-medium text-trade-text/50 shrink-0 border-l border-trade-text/10 py-2.5">
+                      min
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Order value */}
