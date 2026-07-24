@@ -11,6 +11,7 @@ import {
   Wallet,
   Bell,
   Settings,
+  Menu,
 } from "lucide-react";
 import { PairSelectorPanel } from "./PairSelectorPanel";
 
@@ -249,6 +250,10 @@ export function ChartOverlay({
             ) : (
               <Moon className="h-[15px] w-[15px] text-trade-text/70" />
             )}
+          </button>
+          {/* Hamburger */}
+          <button className="h-8 w-8 flex items-center justify-center" aria-label="Menu">
+            <Menu className="h-5 w-5 text-trade-text/80" />
           </button>
         </div>
       </header>
