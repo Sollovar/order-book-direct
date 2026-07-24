@@ -4,11 +4,13 @@ import {
   ChevronDown,
   Sun,
   Moon,
-  Menu,
   BarChart2,
   UserCircle,
   Link2,
   Search,
+  Wallet,
+  Bell,
+  Settings,
 } from "lucide-react";
 import { PairSelectorPanel } from "./PairSelectorPanel";
 
@@ -212,36 +214,41 @@ export function ChartOverlay({
       }`}
     >
       {/* ── TOP NAV — identical to trade page ── */}
-      <header className="flex items-center justify-between px-2 pt-4 pb-3 flex-shrink-0">
+      <header className="flex items-center justify-between px-3 pt-4 pb-3 flex-shrink-0">
         <div className="h-8 w-8 rounded-full border border-trade-text/15 flex items-center justify-center">
           <div className="h-4 w-4 rounded-full border-2 border-trade-text/70 border-t-transparent rotate-45" />
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 rounded-full border border-trade-text/15 pl-1.5 pr-2 py-1">
-            <span className="h-5 w-5 rounded-full bg-[#f0b90b] flex items-center justify-center text-trade-primary-text text-[10px] font-bold">
-              ◆
-            </span>
-            <ChevronDown className="h-3 w-3 text-trade-text/70" />
-          </button>
-          <button className="rounded-full border border-trade-primary/40 text-trade-primary px-4 py-1.5 text-[13px]">
+          {/* Connect — gold, wallet icon, matches trading panel */}
+          <button className="flex items-center gap-1.5 rounded-full bg-[#f0b90b] text-[#1a1200] pl-2.5 pr-3.5 py-1.5 text-[13px] font-bold active:brightness-90 transition-all shadow-sm">
+            <Wallet className="h-3.5 w-3.5" />
             Connect
           </button>
-          <button className="flex items-center gap-1 rounded-full border border-trade-text/15 px-3 py-1.5 text-trade-text/80">
-            Old <span className="text-trade-text/50">⇌</span>
+          {/* Notification */}
+          <button
+            className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
+            aria-label="Notifications"
+          >
+            <Bell className="h-[15px] w-[15px] text-trade-text/70" />
           </button>
+          {/* Settings */}
+          <button
+            className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
+            aria-label="Settings"
+          >
+            <Settings className="h-[15px] w-[15px] text-trade-text/70" />
+          </button>
+          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full border border-trade-text/15"
+            className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? (
-              <Sun className="h-4 w-4 text-trade-text/80" />
+              <Sun className="h-[15px] w-[15px] text-trade-text/70" />
             ) : (
-              <Moon className="h-4 w-4 text-trade-text/80" />
+              <Moon className="h-[15px] w-[15px] text-trade-text/70" />
             )}
-          </button>
-          <button className="p-1">
-            <Menu className="h-5 w-5 text-trade-text/80" />
           </button>
         </div>
       </header>
