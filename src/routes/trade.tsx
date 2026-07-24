@@ -90,6 +90,8 @@ function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookVisible, setBookVisible] = useState(true);
   const [bookFilter, setBookFilter] = useState<"both" | "bids" | "asks">("both");
+  const [tickSize, setTickSize] = useState("0.1");
+  const [tickSheetOpen, setTickSheetOpen] = useState(false);
   const [ladderPriceStart, setLadderPriceStart] = useState("");
   const [ladderPriceEnd, setLadderPriceEnd] = useState("");
   const [ladderLevels, setLadderLevels] = useState(5);
@@ -405,8 +407,11 @@ function Index() {
                 </button>
               </div>
 
-              <button className="flex items-center gap-1 text-trade-text/70 text-[12px]">
-                0.1 <ChevronDown className="h-3 w-3" />
+              <button
+                onClick={() => setTickSheetOpen(true)}
+                className="flex items-center gap-1 text-trade-text/70 text-[12px] active:opacity-60 transition-opacity"
+              >
+                {tickSize} <ChevronDown className="h-3 w-3" />
               </button>
             </div>
           </div>
@@ -739,6 +744,17 @@ function Index() {
         document.body
       )}
 
+      {/* Tick Size Bottom Sheet */}
+      {tickSheetOpen && typeof document !== "undefined" && createPortal(
+        <TickSizeSheet
+          current={tickSize}
+          onSelect={(v) => { setTickSize(v); setTickSheetOpen(false); }}
+          onClose={() => setTickSheetOpen(false)}
+          theme={theme}
+        />,
+        document.body
+      )}
+
       {/* Order Type Bottom Sheet — rendered via portal to escape stacking contexts */}
       {orderTypeSheetOpen && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 flex flex-col justify-end" style={{ zIndex: 9999 }}>
@@ -998,6 +1014,67 @@ function MobileMenuSheet({ onClose, theme }: { onClose: () => void; theme: "ligh
             </div>
           </div>
 
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Tick Size Bottom Sheet ────────────────────────────────────────────────── */
+
+const TICK_SIZES = ["0.1", "1", "10", "50", "100"];
+
+function TickSizeSheet({
+  current,
+  onSelect,
+  onClose,
+  theme,
+}: {
+  current: string;
+  onSelect: (v: string) => void;
+  onClose: () => void;
+  theme: "light" | "dark";
+}) {
+  return (
+    <div
+      className={`fixed inset-0 flex flex-col justify-end ${theme === "dark" ? "dark" : ""}`}
+      style={{ zIndex: 9999 }}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" onClick={onClose} />
+
+      {/* Sheet */}
+      <div
+        className="relative bg-trade-card rounded-t-3xl shadow-2xl"
+        style={{ paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))" }}
+      >
+        {/* Handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
+        </div>
+
+        {/* Options */}
+        <div className="px-6 pt-3">
+          {TICK_SIZES.map((v, i) => (
+            <button
+              key={v}
+              onClick={() => onSelect(v)}
+              className={`w-full flex items-center justify-between py-4 text-left active:opacity-60 transition-opacity ${
+                i < TICK_SIZES.length - 1 ? "border-b border-trade-text/6" : ""
+              }`}
+            >
+              <span
+                className={`text-[17px] ${
+                  current === v ? "text-trade-text font-medium" : "text-trade-text/70"
+                }`}
+              >
+                {v}
+              </span>
+              {current === v && (
+                <Check className="h-[18px] w-[18px] text-trade-text" strokeWidth={2.5} />
+              )}
+            </button>
+          ))}
         </div>
       </div>
     </div>
