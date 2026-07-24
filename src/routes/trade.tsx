@@ -747,9 +747,15 @@ function Index() {
       {/* Chart overlay — opens when Markets nav tab is tapped */}
       <ChartOverlay
         open={chartOpen}
-        onClose={() => { setChartOpen(false); setNavTab("Trade"); }}
         theme={theme}
+        toggleTheme={toggleTheme}
         countdown={countdown}
+        navTab={navTab}
+        setNavTab={(t) => {
+          setNavTab(t);
+          if (t !== "Markets") setChartOpen(false);
+        }}
+        onOpenChart={() => setChartOpen(true)}
       />
 
       {/* Order Type Bottom Sheet — rendered via portal to escape stacking contexts */}
