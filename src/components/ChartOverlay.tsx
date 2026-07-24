@@ -258,11 +258,11 @@ export function ChartOverlay({
         </div>
       </header>
 
-      {/* ── MAIN CONTENT — px-2 flush to edges ── */}
-      <div className="flex-1 px-2 flex flex-col gap-2">
+      {/* ── MAIN CONTENT — flush to edges ── */}
+      <div className="flex-1 flex flex-col gap-1">
 
-        {/* ── CHART CARD — one rounded card: pair header + chart ── */}
-        <div className="rounded-2xl bg-trade-card border border-trade-text/5 overflow-hidden">
+        {/* ── CHART CARD — full-width, no side rounding ── */}
+        <div className="bg-trade-card border-y border-trade-text/5 overflow-hidden">
 
           {/* Pair header */}
           <div className="px-3 pt-3 pb-2.5 bg-trade-surface/30">
@@ -394,8 +394,8 @@ export function ChartOverlay({
           </div>
         </div>
 
-        {/* ── OPEN ORDERS — separate card, same as trade page bottom section ── */}
-        <section className="rounded-2xl bg-trade-card border border-trade-text/5">
+        {/* ── OPEN ORDERS — full-width, flush to edges ── */}
+        <section className="bg-trade-card border-y border-trade-text/5">
           <div className="flex items-center justify-between border-b border-trade-text/5 px-3">
             <div className="flex items-center justify-between flex-1">
               {bottomTabs.map(t => (
