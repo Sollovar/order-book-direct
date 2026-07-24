@@ -88,6 +88,7 @@ function Index() {
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [bookVisible, setBookVisible] = useState(true);
   const [ladderPriceStart, setLadderPriceStart] = useState("");
   const [ladderPriceEnd, setLadderPriceEnd] = useState("");
   const [ladderLevels, setLadderLevels] = useState(5);
@@ -236,19 +237,44 @@ function Index() {
             <span className="text-[9px] text-trade-text/50 leading-none">▼</span>
           </button>
 
-          {/* Right: price + change + dropdown toggle */}
-          <button
-            onClick={() => setStatsOpen((o) => !o)}
-            className="flex items-center gap-2 active:opacity-70 transition-opacity"
-          >
-            <span className="text-trade-text font-medium text-[15px]">66,007.4</span>
-            <span className="text-trade-ask text-[13px] font-medium">-0.52%</span>
-            <span
-              className={`text-[9px] text-trade-text/50 leading-none transition-transform duration-200 inline-block ${statsOpen ? "rotate-180" : ""}`}
+          {/* Right: price + change + dropdown toggle + order book toggle */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setStatsOpen((o) => !o)}
+              className="flex items-center gap-2 active:opacity-70 transition-opacity"
             >
-              ▼
-            </span>
-          </button>
+              <span className="text-trade-text font-medium text-[15px]">66,007.4</span>
+              <span className="text-trade-ask text-[13px] font-medium">-0.52%</span>
+              <span
+                className={`text-[9px] text-trade-text/50 leading-none transition-transform duration-200 inline-block ${statsOpen ? "rotate-180" : ""}`}
+              >
+                ▼
+              </span>
+            </button>
+
+            {/* Order book toggle */}
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[8px] font-semibold tracking-wide text-trade-text-muted uppercase leading-none">OB</span>
+              <button
+                onClick={() => setBookVisible(v => !v)}
+                aria-label="Toggle order book"
+                className="relative flex-shrink-0 transition-all duration-200 active:scale-95"
+                style={{ width: 30, height: 17 }}
+              >
+                <span
+                  className="absolute inset-0 rounded-full transition-colors duration-200"
+                  style={{ backgroundColor: bookVisible ? "#f0b90b" : "rgba(128,128,128,0.25)" }}
+                />
+                <span
+                  className="absolute top-[2px] rounded-full bg-white shadow-sm transition-all duration-200"
+                  style={{
+                    width: 13, height: 13,
+                    left: bookVisible ? 15 : 2,
+                  }}
+                />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Expanded stats panel */}
@@ -282,9 +308,9 @@ function Index() {
       {/* Main trading card */}
       <section className="rounded-xl bg-trade-card border border-trade-text/5 p-3">
 
-        <div className="grid grid-cols-2 gap-3 mt-3">
+        <div className={`grid gap-3 mt-3 ${bookVisible ? "grid-cols-2" : "grid-cols-1"}`}>
           {/* LEFT: order book */}
-          <div>
+          {bookVisible && <div>
             <div className="flex items-center justify-between text-[10px] text-trade-text-muted">
 
               <div>
@@ -333,6 +359,7 @@ function Index() {
               </button>
             </div>
           </div>
+          }
 
           {/* RIGHT: order form */}
           <div className="space-y-2">
