@@ -169,6 +169,19 @@ function Index() {
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   };
 
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  if (isDesktop) {
+    return <DesktopTrade theme={theme} onToggleTheme={toggleTheme} />;
+  }
+
   return (
     <div
       className={`min-h-screen bg-trade-bg text-trade-text font-sans text-[13px] pb-20 ${
