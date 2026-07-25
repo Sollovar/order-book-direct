@@ -5,6 +5,8 @@ interface SettingsSheetProps {
   onClose: () => void;
   theme: "light" | "dark";
   toggleTheme: () => void;
+  alertSound: boolean;
+  onAlertSoundChange: (v: boolean) => void;
 }
 
 function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void }) {
@@ -110,9 +112,8 @@ function LanguageSheet({
   );
 }
 
-export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProps) {
+export function SettingsSheet({ onClose, theme, toggleTheme, alertSound, onAlertSoundChange }: SettingsSheetProps) {
   const [fillSound, setFillSound] = useState(false);
-  const [alertSound, setAlertSound] = useState(true);
   const [language, setLanguage] = useState("English");
   const [langOpen, setLangOpen] = useState(false);
 
@@ -148,7 +149,7 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
     {
       icon: Bell,
       label: "Price Alert Sound",
-      right: <Toggle enabled={alertSound} onToggle={() => setAlertSound(v => !v)} />,
+      right: <Toggle enabled={alertSound} onToggle={() => onAlertSoundChange(!alertSound)} />,
       sub: "Play a sound when a price alert fires",
       onClick: undefined,
     },

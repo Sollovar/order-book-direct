@@ -1,45 +1,41 @@
 import { Search, Star, X, Bell, BellPlus, ChevronUp, ChevronDown, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { PAIRS, type Pair } from "../lib/pairs";
+import type { PriceAlert } from "../lib/alerts";
 
 interface PairSelectorPanelProps {
   open: boolean;
   onClose: () => void;
+  alerts: PriceAlert[];
+  onAddAlert: (symbol: string, direction: "above" | "below", price: number) => void;
+  onRemoveAlert: (id: string) => void;
 }
 
 // ─── Price Alert Sheet ────────────────────────────────────────────────────────
 
-interface Alert {
-  id: number;
-  symbol: string;
-  direction: "above" | "below";
-  price: string;
-}
-
-let alertIdCounter = 1;
-
 function PriceAlertSheet({
   pair,
+  alerts,
+  onAddAlert,
+  onRemoveAlert,
   onClose,
 }: {
   pair: Pair;
+  alerts: PriceAlert[];
+  onAddAlert: (symbol: string, direction: "above" | "below", price: number) => void;
+  onRemoveAlert: (id: string) => void;
   onClose: () => void;
 }) {
   const [direction, setDirection] = useState<"above" | "below">("above");
   const [targetPrice, setTargetPrice] = useState(pair.price.replace(/,/g, ""));
-  const [alerts, setAlerts] = useState<Alert[]>([]);
 
-  function addAlert() {
-    if (!targetPrice) return;
-    setAlerts((prev) => [
-      ...prev,
-      { id: alertIdCounter++, symbol: pair.symbol, direction, price: targetPrice },
-    ]);
+  const pairAlerts = alerts.filter((a) => a.symbol === pair.symbol);
+
+  function handleAdd() {
+    const num = parseFloat(targetPrice);
+    if (!num) return;
+    onAddAlert(pair.symbol, direction, num);
     setTargetPrice(pair.price.replace(/,/g, ""));
-  }
-
-  function removeAlert(id: number) {
-    setAlerts((prev) => prev.filter((a) => a.id !== id));
   }
 
   return (
@@ -109,9 +105,15 @@ function PriceAlertSheet({
               onClick={() => setDirection("above")}
               className="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-[14px] font-semibold transition-all"
               style={{
-                backgroundColor: direction === "above" ? "rgba(34,197,94,0.12)" : "var(--color-trade-surface, rgba(128,128,128,0.08))",
-                color: direction === "above" ? "#22c55e" : "var(--color-trade-text-muted, gray)",
-                border: direction === "above" ? "1px solid rgba(34,197,94,0.25)" : "1px solid transparent",
+                backgroundColor:
+                  direction === "above"
+                    ? "rgba(34,197,94,0.12)"
+                    : "rgba(128,128,128,0.08)",
+                color: direction === "above" ? "#22c55e" : "rgba(128,128,128,0.6)",
+                border:
+                  direction === "above"
+                    ? "1px solid rgba(34,197,94,0.25)"
+                    : "1px solid transparent",
               }}
             >
               <ChevronUp className="h-4 w-4" />
@@ -121,9 +123,15 @@ function PriceAlertSheet({
               onClick={() => setDirection("below")}
               className="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-[14px] font-semibold transition-all"
               style={{
-                backgroundColor: direction === "below" ? "rgba(239,68,68,0.12)" : "var(--color-trade-surface, rgba(128,128,128,0.08))",
-                color: direction === "below" ? "#ef4444" : "var(--color-trade-text-muted, gray)",
-                border: direction === "below" ? "1px solid rgba(239,68,68,0.25)" : "1px solid transparent",
+                backgroundColor:
+                  direction === "below"
+                    ? "rgba(239,68,68,0.12)"
+                    : "rgba(128,128,128,0.08)",
+                color: direction === "below" ? "#ef4444" : "rgba(128,128,128,0.6)",
+                border:
+                  direction === "below"
+                    ? "1px solid rgba(239,68,68,0.25)"
+                    : "1px solid transparent",
               }}
             >
               <ChevronDown className="h-4 w-4" />
@@ -153,7 +161,7 @@ function PriceAlertSheet({
         {/* Set Alert button */}
         <div className="px-5 mb-4">
           <button
-            onClick={addAlert}
+            onClick={handleAdd}
             className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 text-[15px] font-bold transition-all active:scale-[0.98]"
             style={{ backgroundColor: "#f0b90b", color: "#000" }}
           >
@@ -162,26 +170,25 @@ function PriceAlertSheet({
           </button>
         </div>
 
-        {/* Active alerts */}
-        {alerts.length > 0 && (
+        {/* Active alerts for this pair */}
+        {pairAlerts.length > 0 && (
           <div className="px-5">
             <p className="text-[11px] text-trade-text-muted uppercase tracking-widest font-medium mb-2">
               Active alerts
             </p>
             <div className="divide-y divide-trade-text/5">
-              {alerts.map((a) => (
+              {pairAlerts.map((a) => (
                 <div key={a.id} className="flex items-center gap-3 py-3">
                   <Bell className="h-4 w-4 text-trade-text/40 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-medium text-trade-text">
-                      {a.symbol}
-                    </p>
+                    <p className="text-[13px] font-medium text-trade-text">{a.symbol}</p>
                     <p className="text-[11px] text-trade-text-muted">
-                      {a.direction === "above" ? "↑ Above" : "↓ Below"} {Number(a.price).toLocaleString()} USDT
+                      {a.direction === "above" ? "↑ Above" : "↓ Below"}{" "}
+                      {a.price.toLocaleString()} USDT
                     </p>
                   </div>
                   <button
-                    onClick={() => removeAlert(a.id)}
+                    onClick={() => onRemoveAlert(a.id)}
                     className="h-7 w-7 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
                   >
                     <Trash2 className="h-3.5 w-3.5 text-trade-text/50" />
@@ -200,10 +207,12 @@ function PriceAlertSheet({
 
 function PairRow({
   p,
+  hasAlert,
   onSelect,
   onLongPress,
 }: {
   p: Pair;
+  hasAlert: boolean;
   onSelect: () => void;
   onLongPress: (pair: Pair) => void;
 }) {
@@ -213,7 +222,7 @@ function PairRow({
   function startPress() {
     setPressing(true);
     timerRef.current = setTimeout(() => {
-      timerRef.current = null; // mark as fired so onPointerUp won't trigger onSelect
+      timerRef.current = null;
       setPressing(false);
       onLongPress(p);
     }, 2000);
@@ -233,7 +242,6 @@ function PairRow({
       style={{ cursor: "pointer" }}
       onPointerDown={startPress}
       onPointerUp={() => {
-        // Only fire onSelect if long-press hasn't fired yet (timer still pending)
         if (timerRef.current) {
           cancelPress();
           onSelect();
@@ -245,15 +253,18 @@ function PairRow({
       {/* Long-press fill progress */}
       {pressing && (
         <span
-          className="absolute inset-0 origin-left bg-trade-text/8 animate-none"
-          style={{
-            animation: "lp-fill 2s linear forwards",
-          }}
+          className="absolute inset-0 origin-left bg-trade-text/8"
+          style={{ animation: "lp-fill 2s linear forwards" }}
         />
       )}
 
-      {/* Star */}
-      <Star className="h-4 w-4 text-trade-text/25 mr-3 flex-shrink-0 relative z-10" />
+      {/* Star / bell indicator */}
+      {hasAlert ? (
+        <Bell className="h-4 w-4 text-[#f0b90b] mr-3 flex-shrink-0 relative z-10" />
+      ) : (
+        <Star className="h-4 w-4 text-trade-text/25 mr-3 flex-shrink-0 relative z-10" />
+      )}
+
       {/* Icon */}
       <div
         className="h-7 w-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mr-2.5 relative z-10"
@@ -261,6 +272,7 @@ function PairRow({
       >
         {p.base.slice(0, 2)}
       </div>
+
       {/* Symbol + lev */}
       <div className="flex flex-col items-start min-w-0 flex-1 relative z-10">
         <span className="text-[13px] font-semibold text-trade-text leading-tight">
@@ -270,11 +282,13 @@ function PairRow({
           {p.lev}
         </span>
       </div>
+
       {/* Vol / OI */}
       <div className="flex flex-col items-end mr-4 text-right relative z-10">
         <span className="text-[12px] text-trade-text">{p.vol}</span>
         <span className="text-[11px] text-trade-text-muted">{p.oi}</span>
       </div>
+
       {/* Price / change */}
       <div className="flex flex-col items-end text-right w-[70px] relative z-10">
         <span className="text-[12px] text-trade-text">{p.price}</span>
@@ -290,7 +304,13 @@ function PairRow({
 
 // ─── Main Panel ───────────────────────────────────────────────────────────────
 
-export function PairSelectorPanel({ open, onClose }: PairSelectorPanelProps) {
+export function PairSelectorPanel({
+  open,
+  onClose,
+  alerts,
+  onAddAlert,
+  onRemoveAlert,
+}: PairSelectorPanelProps) {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("Futures");
   const [sub, setSub] = useState("All markets");
@@ -394,30 +414,37 @@ export function PairSelectorPanel({ open, onClose }: PairSelectorPanelProps) {
           {/* Hold-to-alert hint */}
           <div className="flex items-center gap-1.5 px-4 py-2 bg-trade-surface/50 border-b border-trade-text/5">
             <Bell className="h-3 w-3 text-trade-text/30 flex-shrink-0" />
-            <span className="text-[11px] text-trade-text/30">Hold a pair for 2 seconds to set a price alert</span>
+            <span className="text-[11px] text-trade-text/30">
+              Hold a pair for 2 seconds to set a price alert
+            </span>
           </div>
 
           {PAIRS.filter(
             (p) =>
-              search === "" || p.symbol.toLowerCase().includes(search.toLowerCase()),
+              search === "" ||
+              p.symbol.toLowerCase().includes(search.toLowerCase()),
           ).map((p) => (
             <PairRow
               key={p.symbol}
               p={p}
+              hasAlert={alerts.some((a) => a.symbol === p.symbol)}
               onSelect={onClose}
               onLongPress={(pair) => setAlertPair(pair)}
             />
           ))}
         </div>
-
-        {/* Price alert sheet — slides up over the pair list */}
-        {alertPair && (
-          <PriceAlertSheet
-            pair={alertPair}
-            onClose={() => setAlertPair(null)}
-          />
-        )}
       </div>
+
+      {/* Price alert sheet — fixed, full-screen overlay */}
+      {alertPair && (
+        <PriceAlertSheet
+          pair={alertPair}
+          alerts={alerts}
+          onAddAlert={onAddAlert}
+          onRemoveAlert={onRemoveAlert}
+          onClose={() => setAlertPair(null)}
+        />
+      )}
 
       {/* Long-press fill keyframe */}
       <style>{`

@@ -31,6 +31,12 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { PAIRS } from "../lib/pairs";
+import {
+  loadAlerts,
+  saveAlerts,
+  playAlertSound,
+  type PriceAlert,
+} from "../lib/alerts";
 
 export const Route = createFileRoute("/trade")({
   head: () => ({
@@ -110,6 +116,83 @@ function Index() {
   const [postOnly, setPostOnly] = useState(false);
   const [expiryEnabled, setExpiryEnabled] = useState(false);
   const [expiryMinutes, setExpiryMinutes] = useState("");
+
+  // ── Price alerts (persisted to localStorage) ──────────────────────────────
+  const [alerts, setAlerts] = useState<PriceAlert[]>(() => loadAlerts());
+  const [alertSound, setAlertSound] = useState<boolean>(() => {
+    const saved = localStorage.getItem("asterdex-alert-sound");
+    return saved === null ? true : saved === "true";
+  });
+  const [firedToast, setFiredToast] = useState<PriceAlert | null>(null);
+  const alertSoundRef = useRef(alertSound);
+  const simPricesRef = useRef<Record<string, number>>({});
+
+  // Persist alertSound preference
+  useEffect(() => {
+    localStorage.setItem("asterdex-alert-sound", String(alertSound));
+    alertSoundRef.current = alertSound;
+  }, [alertSound]);
+
+  // Init simulated prices from pair data
+  useEffect(() => {
+    PAIRS.forEach((p) => {
+      simPricesRef.current[p.symbol] = parseFloat(p.price.replace(/,/g, ""));
+    });
+  }, []);
+
+  // Alert monitor — drift prices ±0.4 % every 2 s, fire matched alerts
+  useEffect(() => {
+    if (alerts.length === 0) return;
+    const id = setInterval(() => {
+      PAIRS.forEach((p) => {
+        const cur = simPricesRef.current[p.symbol] ?? parseFloat(p.price.replace(/,/g, ""));
+        simPricesRef.current[p.symbol] = cur * (1 + (Math.random() - 0.5) * 0.008);
+      });
+
+      setAlerts((prev) => {
+        const fired: PriceAlert[] = [];
+        const remaining = prev.filter((a) => {
+          const cur = simPricesRef.current[a.symbol];
+          if (cur == null) return true;
+          const hit = a.direction === "above" ? cur >= a.price : cur <= a.price;
+          if (hit) { fired.push(a); return false; }
+          return true;
+        });
+        if (fired.length > 0) {
+          saveAlerts(remaining);
+          if (alertSoundRef.current) playAlertSound();
+          setFiredToast(fired[0]);
+          setTimeout(() => setFiredToast(null), 4500);
+        }
+        return remaining;
+      });
+    }, 2000);
+    return () => clearInterval(id);
+  }, [alerts.length]);
+
+  function addAlert(symbol: string, direction: "above" | "below", price: number) {
+    const newAlert: PriceAlert = {
+      id: `${Date.now()}-${Math.random()}`,
+      symbol,
+      direction,
+      price,
+      createdAt: Date.now(),
+    };
+    setAlerts((prev) => {
+      const next = [...prev, newAlert];
+      saveAlerts(next);
+      return next;
+    });
+  }
+
+  function removeAlert(id: string) {
+    setAlerts((prev) => {
+      const next = prev.filter((a) => a.id !== id);
+      saveAlerts(next);
+      return next;
+    });
+  }
+
   const ORDER_TYPES: { label: string; desc: string }[] = [
     { label: "Limit",  desc: "Set your price" },
     { label: "Market", desc: "Fill instantly" },
@@ -716,7 +799,46 @@ function Index() {
       </section>
 
       {/* Market selector panel */}
-      <PairSelectorPanel open={pairsOpen} onClose={() => setPairsOpen(false)} />
+      <PairSelectorPanel
+        open={pairsOpen}
+        onClose={() => setPairsOpen(false)}
+        alerts={alerts}
+        onAddAlert={addAlert}
+        onRemoveAlert={removeAlert}
+      />
+
+      {/* Price alert fired toast */}
+      {firedToast && (
+        <div
+          className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
+          style={{
+            background: "rgba(20,20,20,0.95)",
+            border: "1px solid rgba(240,185,11,0.35)",
+            backdropFilter: "blur(12px)",
+            minWidth: 260,
+            animation: "slide-down 0.25s ease",
+          }}
+        >
+          <Bell className="h-4 w-4 flex-shrink-0" style={{ color: "#f0b90b" }} />
+          <div className="flex-1 min-w-0">
+            <p className="text-[13px] font-bold text-white leading-tight">
+              Price Alert Fired
+            </p>
+            <p className="text-[12px] text-white/60 mt-0.5">
+              {firedToast.symbol}{" "}
+              {firedToast.direction === "above" ? "↑ above" : "↓ below"}{" "}
+              {firedToast.price.toLocaleString()} USDT
+            </p>
+          </div>
+          <button
+            onClick={() => setFiredToast(null)}
+            className="h-6 w-6 flex items-center justify-center rounded-full bg-white/10 active:opacity-60"
+          >
+            <X className="h-3 w-3 text-white/60" />
+          </button>
+        </div>
+      )}
+      <style>{`@keyframes slide-down { from { opacity:0; transform:translate(-50%,-10px); } to { opacity:1; transform:translate(-50%,0); } }`}</style>
 
       {/* Bottom nav — Hyperliquid style */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-trade-card border-t border-trade-text/5 flex items-center justify-around px-8 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
@@ -792,7 +914,13 @@ function Index() {
 
       {/* Settings Sheet */}
       {settingsOpen && typeof document !== "undefined" && createPortal(
-        <SettingsSheet onClose={() => setSettingsOpen(false)} theme={theme} toggleTheme={toggleTheme} />,
+        <SettingsSheet
+          onClose={() => setSettingsOpen(false)}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          alertSound={alertSound}
+          onAlertSoundChange={setAlertSound}
+        />,
         document.body
       )}
 
