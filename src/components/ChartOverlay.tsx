@@ -268,7 +268,7 @@ export function ChartOverlay({
       <div className="flex-1 px-1 flex flex-col gap-1">
 
         {/* ── CHART CARD — tiny side gap, slight rounding ── */}
-        <div className="rounded-xl bg-trade-card border border-trade-text/5 overflow-hidden">
+        <div className="rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
 
           {/* Pair header */}
           <div className="px-3 pt-3 pb-2.5 bg-trade-surface/30">
@@ -401,7 +401,7 @@ export function ChartOverlay({
         </div>
 
         {/* ── OPEN ORDERS — tiny side gap, slight rounding ── */}
-        <section className="rounded-xl bg-trade-card border border-trade-text/5">
+        <section className="rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
           <div className="flex items-center justify-between border-b border-trade-text/5 px-3">
             <div className="flex items-center justify-between flex-1">
               {bottomTabs.map(t => (

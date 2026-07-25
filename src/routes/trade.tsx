@@ -227,7 +227,7 @@ function Index() {
       </header>
 
       {/* Pair header */}
-      <div className="mx-2 mb-2 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
+      <div className="mx-1 mb-2 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
         {/* Top row */}
         <div className="px-5 py-4 flex items-center justify-between">
           {/* Left: icon + symbol (tappable → market selector) */}
@@ -311,7 +311,7 @@ function Index() {
       </div>
 
       {/* Main trading card */}
-      <section className="mx-2 rounded-3xl bg-trade-card shadow-2xl p-5">
+      <section className="mx-1 rounded-3xl bg-trade-card shadow-2xl p-5">
 
         <div className={`grid gap-3 mt-3 ${bookVisible ? "grid-cols-2" : "grid-cols-1"}`}>
           {/* LEFT: order book */}
@@ -684,7 +684,7 @@ function Index() {
       </section>
 
       {/* Bottom tabs */}
-      <section className="mx-2 mt-3 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
+      <section className="mx-1 mt-3 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between border-b border-trade-text/5 px-5">
           <div className="flex items-center justify-between flex-1">
             {tabs.map((t) => (
