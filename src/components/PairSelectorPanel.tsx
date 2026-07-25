@@ -211,6 +211,7 @@ function PriceAlertSheet({
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
