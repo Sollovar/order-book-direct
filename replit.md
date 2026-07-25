@@ -1,35 +1,42 @@
 # AsterDex
 
-An on-chain perpetuals exchange UI built with TanStack Start, React 19, TypeScript, and Tailwind CSS v4.
+A perpetuals (perps) DEX landing page built with TanStack Start, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui components. Originally created in Lovable.
 
-## Stack
-
-- **Framework**: TanStack Start (SSR) + Vite
-- **UI**: React 19, Radix UI primitives, shadcn/ui components
-- **Styling**: Tailwind CSS v4
-- **Package manager**: Bun
-
-## Running the app
+## How to run
 
 ```sh
 bun install
 bun run dev
 ```
 
-The dev server starts on port 5000. The configured Replit workflow (`Start application`) handles this automatically.
+The dev server starts on port 5000. On Replit, the **Start application** workflow handles this automatically.
+
+## Stack
+
+- **TanStack Start** — SSR-capable React meta-framework
+- **TanStack Router** — file-based routing (`src/routes/`)
+- **React 19** + **TypeScript**
+- **Tailwind CSS v4** via `@tailwindcss/vite`
+- **shadcn/ui** (Radix UI primitives) in `src/components/ui/`
+- **Vite** for bundling (`vite.config.ts` via `@lovable.dev/vite-tanstack-config`)
+- **Bun** as the runtime/package manager on Replit
 
 ## Project structure
 
-- `src/routes/` — file-based routes (TanStack Router)
-  - `index.tsx` — landing page
-  - `trade.tsx` — trade/exchange view
-- `src/components/` — app-specific components (chart overlay, pair selector, notifications, settings)
-- `src/components/ui/` — shadcn/ui component library
-- `vite.config.ts` — Vite config (via `@lovable.dev/vite-tanstack-config`)
-
-## Notes
-
-- This project was originally built with [Lovable](https://lovable.dev). Avoid force-pushing or rebasing published commits — history is synced with Lovable.
-- The `@lovable.dev/vite-tanstack-config` package bundles TanStack devtools, TailwindCSS, tsconfig paths, and nitro — do not add these plugins manually.
+```
+src/
+  routes/         # File-based TanStack Router pages
+    __root.tsx    # Root layout
+    index.tsx     # Landing page (/)
+    trade.tsx     # Trade page (/trade)
+  components/     # Shared components (ui/, feature components)
+  lib/            # Utilities
+  styles.css      # Global styles (Tailwind)
+  router.tsx      # Router setup
+  server.ts       # SSR server entry
+  start.ts        # App entry point
+```
 
 ## User preferences
+
+- Keep existing file structure and stack unless asked to change it.
