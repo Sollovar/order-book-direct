@@ -366,7 +366,7 @@ export function PairSelectorPanel({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex flex-col justify-end">
+    <div className="fixed inset-0 z-[80] flex flex-col justify-end overflow-hidden">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
@@ -426,7 +426,7 @@ export function PairSelectorPanel({
         </div>
 
         {/* Pairs list — horizontally scrollable, symbol column sticky */}
-        <div className="flex-1 overflow-y-auto overflow-x-auto no-scrollbar">
+        <div className="flex-1 overflow-y-auto overflow-x-auto no-scrollbar" style={{ overscrollBehaviorX: "contain" }}>
           <div style={{ minWidth: 520 }}>
 
             {/* Hold-to-alert hint */}
