@@ -7,9 +7,9 @@ import type { PriceAlert } from "../lib/alerts";
 interface PairSelectorPanelProps {
   open: boolean;
   onClose: () => void;
-  alerts: PriceAlert[];
-  onAddAlert: (symbol: string, direction: "above" | "below", price: number) => void;
-  onRemoveAlert: (id: string) => void;
+  alerts?: PriceAlert[];
+  onAddAlert?: (symbol: string, direction: "above" | "below", price: number) => void;
+  onRemoveAlert?: (id: string) => void;
 }
 
 // ─── Price Alert Sheet ────────────────────────────────────────────────────────
@@ -328,13 +328,16 @@ function PairRow({
 export function PairSelectorPanel({
   open,
   onClose,
-  alerts,
+  alerts = [],
   onAddAlert,
   onRemoveAlert,
 }: PairSelectorPanelProps) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [alertPair, setAlertPair] = useState<Pair | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => { setIsMounted(true); }, []);
 
   const FILTERS = ["All", "Favorites", "Gainers", "Losers", "Volume", "Trending"];
 
@@ -364,16 +367,25 @@ export function PairSelectorPanel({
     }
   }
 
-  // Lock body scroll (both axes) while panel is open so the page can't
-  // drift horizontally and pull the fixed panel with it.
+  // iOS-safe body scroll lock: position:fixed prevents rubber-band bounce
+  // from dragging fixed-position elements sideways on Safari.
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflowX = "hidden";
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflowX = "";
+      window.scrollTo(0, scrollY);
+    };
   }, [open]);
 
-  if (!open) return null;
+  if (!open || !isMounted) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-[80] flex flex-col justify-end overflow-hidden">
@@ -383,8 +395,8 @@ export function PairSelectorPanel({
         onClick={onClose}
       />
 
-      {/* Sheet */}
-      <div className="relative bg-trade-card rounded-t-3xl shadow-2xl flex flex-col max-h-[90vh]">
+      {/* Sheet — overflow-x:hidden prevents inner wide content from shifting the sheet sideways */}
+      <div className="relative bg-trade-card rounded-t-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-x-hidden">
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
           <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
