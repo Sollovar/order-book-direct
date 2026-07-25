@@ -43,7 +43,7 @@ function PriceAlertSheet({
   }
 
   return (
-    <div className="absolute inset-0 flex flex-col justify-end" style={{ zIndex: 1 }}>
+    <div className="fixed inset-0 flex flex-col justify-end" style={{ zIndex: 200 }}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
@@ -213,6 +213,7 @@ function PairRow({
   function startPress() {
     setPressing(true);
     timerRef.current = setTimeout(() => {
+      timerRef.current = null; // mark as fired so onPointerUp won't trigger onSelect
       setPressing(false);
       onLongPress(p);
     }, 2000);
@@ -232,7 +233,7 @@ function PairRow({
       style={{ cursor: "pointer" }}
       onPointerDown={startPress}
       onPointerUp={() => {
-        // Only fire onClick if we haven't hit the long-press threshold
+        // Only fire onSelect if long-press hasn't fired yet (timer still pending)
         if (timerRef.current) {
           cancelPress();
           onSelect();
