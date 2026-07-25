@@ -126,8 +126,14 @@ function Index() {
   const [firedToast, setFiredToast] = useState<PriceAlert | null>(null);
   const [alertNotifications, setAlertNotifications] = useState<Notification[]>([]);
   const alertSoundRef = useRef(alertSound);
+  const alertsRef = useRef(alerts);
   const simPricesRef = useRef<Record<string, number>>({});
   const alertNotifIdRef = useRef(10000); // start above mock IDs
+
+  // Keep alertsRef in sync so the interval can read current alerts without a stale closure
+  useEffect(() => {
+    alertsRef.current = alerts;
+  }, [alerts]);
 
   // Persist alertSound preference
   useEffect(() => {
@@ -146,40 +152,42 @@ function Index() {
   useEffect(() => {
     if (alerts.length === 0) return;
     const id = setInterval(() => {
+      // Drift simulated prices
       PAIRS.forEach((p) => {
         const cur = simPricesRef.current[p.symbol] ?? parseFloat(p.price.replace(/,/g, ""));
         simPricesRef.current[p.symbol] = cur * (1 + (Math.random() - 0.5) * 0.008);
       });
 
-      setAlerts((prev) => {
-        const fired: PriceAlert[] = [];
-        const remaining = prev.filter((a) => {
-          const cur = simPricesRef.current[a.symbol];
-          if (cur == null) return true;
-          const hit = a.direction === "above" ? cur >= a.price : cur <= a.price;
-          if (hit) { fired.push(a); return false; }
-          return true;
-        });
-        if (fired.length > 0) {
-          saveAlerts(remaining);
-          if (alertSoundRef.current) playAlertSound();
-          setFiredToast(fired[0]);
-          setTimeout(() => setFiredToast(null), 4500);
-          // Add each fired alert as a notification in the notifications sheet
-          setAlertNotifications((prev) => [
-            ...fired.map((a) => ({
-              id: alertNotifIdRef.current++,
-              type: "alert" as const,
-              title: "Price Alert Hit",
-              body: `${a.symbol} moved ${a.direction === "above" ? "↑ above" : "↓ below"} ${a.price.toLocaleString()} USDT`,
-              time: "just now",
-              unread: true,
-            })),
-            ...prev,
-          ]);
-        }
-        return remaining;
+      // Compute fired/remaining outside any state updater to avoid
+      // React 18 Strict Mode double-invocation causing duplicate notifications
+      const fired: PriceAlert[] = [];
+      const remaining = alertsRef.current.filter((a) => {
+        const cur = simPricesRef.current[a.symbol];
+        if (cur == null) return true;
+        const hit = a.direction === "above" ? cur >= a.price : cur <= a.price;
+        if (hit) { fired.push(a); return false; }
+        return true;
       });
+
+      if (fired.length > 0) {
+        saveAlerts(remaining);
+        alertsRef.current = remaining;
+        setAlerts(remaining);
+        if (alertSoundRef.current) playAlertSound();
+        setFiredToast(fired[0]);
+        setTimeout(() => setFiredToast(null), 4500);
+        setAlertNotifications((prev) => [
+          ...fired.map((a) => ({
+            id: alertNotifIdRef.current++,
+            type: "alert" as const,
+            title: "Price Alert Hit",
+            body: `${a.symbol} moved ${a.direction === "above" ? "↑ above" : "↓ below"} ${a.price.toLocaleString()} USDT`,
+            time: "just now",
+            unread: true,
+          })),
+          ...prev,
+        ]);
+      }
     }, 2000);
     return () => clearInterval(id);
   }, [alerts.length]);
