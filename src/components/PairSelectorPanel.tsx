@@ -326,9 +326,36 @@ export function PairSelectorPanel({
   onRemoveAlert,
 }: PairSelectorPanelProps) {
   const [search, setSearch] = useState("");
-  const [cat, setCat] = useState("Futures");
-  const [sub, setSub] = useState("All markets");
+  const [filter, setFilter] = useState("All");
   const [alertPair, setAlertPair] = useState<Pair | null>(null);
+
+  const FILTERS = ["All", "Favorites", "Gainers", "Losers", "Volume", "Trending"];
+
+  function applyFilter(pairs: Pair[]) {
+    switch (filter) {
+      case "Favorites":
+        return pairs.filter((p) => alerts.some((a) => a.symbol === p.symbol));
+      case "Gainers":
+        return [...pairs].filter((p) => p.up).sort((a, b) =>
+          parseFloat(b.change) - parseFloat(a.change)
+        );
+      case "Losers":
+        return [...pairs].filter((p) => !p.up).sort((a, b) =>
+          parseFloat(a.change) - parseFloat(b.change)
+        );
+      case "Volume":
+        return [...pairs].sort((a, b) =>
+          parseFloat(b.vol.replace(/[^0-9.]/g, "")) - parseFloat(a.vol.replace(/[^0-9.]/g, ""))
+        );
+      case "Trending":
+        return [...pairs].sort((a, b) =>
+          parseFloat(b.change.replace("%", "").replace("+", "")) -
+          parseFloat(a.change.replace("%", "").replace("+", ""))
+        );
+      default:
+        return pairs;
+    }
+  }
 
   if (!open) return null;
 
@@ -375,37 +402,20 @@ export function PairSelectorPanel({
           </div>
         </div>
 
-        {/* Category tabs */}
-        <div className="flex items-center gap-5 px-4 border-b border-trade-text/8">
-          {["Favorites", "Futures", "Spot", "Prediction"].map((c) => (
+        {/* Filter tabs */}
+        <div className="flex items-center gap-2 px-4 pb-3 overflow-x-auto no-scrollbar">
+          {FILTERS.map((f) => (
             <button
-              key={c}
-              onClick={() => setCat(c)}
-              className={`pb-2.5 text-[14px] font-medium border-b-2 transition-colors ${
-                cat === c
-                  ? "border-trade-text text-trade-text"
-                  : "border-transparent text-trade-text-muted"
-              }`}
+              key={f}
+              onClick={() => setFilter(f)}
+              className="flex-shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all"
+              style={
+                filter === f
+                  ? { backgroundColor: "#f0b90b", color: "#000" }
+                  : { backgroundColor: "rgba(128,128,128,0.1)", color: "var(--trade-text-muted)" }
+              }
             >
-              {c}
-              {c === "Prediction" && (
-                <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-trade-ask align-middle" />
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Sub-category tabs */}
-        <div className="flex items-center justify-between px-4 py-2.5">
-          {["All markets", "Top", "New", "Meme", "AI", "Pre-launch", "Stocks"].map((s) => (
-            <button
-              key={s}
-              onClick={() => setSub(s)}
-              className={`flex-shrink-0 text-[13px] font-medium transition-colors ${
-                sub === s ? "text-[#f0b90b]" : "text-trade-text-muted"
-              }`}
-            >
-              {s}
+              {f}
             </button>
           ))}
         </div>
@@ -433,10 +443,12 @@ export function PairSelectorPanel({
             </span>
           </div>
 
-          {PAIRS.filter(
-            (p) =>
-              search === "" ||
-              p.symbol.toLowerCase().includes(search.toLowerCase()),
+          {applyFilter(
+            PAIRS.filter(
+              (p) =>
+                search === "" ||
+                p.symbol.toLowerCase().includes(search.toLowerCase()),
+            )
           ).map((p) => (
             <PairRow
               key={p.symbol}
@@ -460,12 +472,14 @@ export function PairSelectorPanel({
         />
       )}
 
-      {/* Long-press fill keyframe */}
+      {/* Long-press fill keyframe + scrollbar hide */}
       <style>{`
         @keyframes lp-fill {
           from { transform: scaleX(0); }
           to   { transform: scaleX(1); }
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
   );
