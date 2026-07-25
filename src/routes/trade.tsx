@@ -227,9 +227,9 @@ function Index() {
       </header>
 
       {/* Pair header */}
-      <div className="mb-1 rounded-xl bg-trade-card border border-trade-text/5 overflow-hidden">
+      <div className="mx-2 mb-2 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
         {/* Top row */}
-        <div className="px-3 py-2.5 flex items-center justify-between">
+        <div className="px-5 py-4 flex items-center justify-between">
           {/* Left: icon + symbol (tappable → market selector) */}
           <button
             onClick={() => setPairsOpen(true)}
@@ -284,7 +284,7 @@ function Index() {
 
         {/* Expanded stats panel */}
         {statsOpen && (
-          <div className="border-t border-trade-text/5 px-3 pt-3 pb-3 grid grid-cols-2 gap-x-4 gap-y-4">
+          <div className="border-t border-trade-text/5 px-5 pt-4 pb-4 grid grid-cols-2 gap-x-4 gap-y-4">
             <div>
               <div className="text-[11px] text-trade-text-muted border-b border-dashed border-trade-text/15 pb-0.5 mb-1">
                 Exchange Price
@@ -311,7 +311,7 @@ function Index() {
       </div>
 
       {/* Main trading card */}
-      <section className="rounded-xl bg-trade-card border border-trade-text/5 p-3">
+      <section className="mx-2 rounded-3xl bg-trade-card shadow-2xl p-5">
 
         <div className={`grid gap-3 mt-3 ${bookVisible ? "grid-cols-2" : "grid-cols-1"}`}>
           {/* LEFT: order book */}
@@ -684,8 +684,8 @@ function Index() {
       </section>
 
       {/* Bottom tabs */}
-      <section className="mt-2 rounded-xl bg-trade-card border border-trade-text/5">
-        <div className="flex items-center justify-between border-b border-trade-text/5 px-3">
+      <section className="mx-2 mt-3 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between border-b border-trade-text/5 px-5">
           <div className="flex items-center justify-between flex-1">
             {tabs.map((t) => (
               <button
