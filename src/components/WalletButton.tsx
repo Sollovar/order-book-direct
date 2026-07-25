@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { usePrivy, useWallets, useFundWallet } from "@privy-io/react-auth";
+import { usePrivy, useWallets, useAddFunds } from "@privy-io/react-auth";
 import { Wallet, Copy, LogOut, Check, X, Plus } from "lucide-react";
-import { bsc } from "viem/chains";
 
 /* ─── helpers ─────────────────────────────────────────────────── */
 
@@ -124,7 +123,7 @@ interface WalletButtonProps {
 export function WalletButton({ fullWidth = false }: WalletButtonProps) {
   const { ready, authenticated, login, logout } = usePrivy();
   const { wallets } = useWallets();
-  const { fundWallet } = useFundWallet();
+  const { addFunds } = useAddFunds();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   // useWallets returns all wallet types (EVM + Solana); pick the first available
@@ -133,7 +132,14 @@ export function WalletButton({ fullWidth = false }: WalletButtonProps) {
   async function handleAddFunds() {
     if (!address) return;
     setSheetOpen(false);
-    await fundWallet(address, { chain: bsc });
+    await addFunds({
+      destination: {
+        address,
+        chain: "eip155:56", // BSC CAIP-2
+        asset: "native-currency",
+      },
+      fiat: {},
+    });
   }
 
   /* ── Not ready (Privy loading) ── */
