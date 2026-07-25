@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChartOverlay } from "../components/ChartOverlay";
 import { PairSelectorPanel } from "../components/PairSelectorPanel";
+import { NotificationsSheet } from "../components/NotificationsSheet";
+import { SettingsSheet } from "../components/SettingsSheet";
 import {
   ChevronDown,
   Search,
@@ -88,6 +90,8 @@ function Index() {
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [bookVisible, setBookVisible] = useState(true);
   const [bookFilter, setBookFilter] = useState<"both" | "bids" | "asks">("both");
   const [tickSize, setTickSize] = useState("0.1");
@@ -191,6 +195,7 @@ function Index() {
           </button>
           {/* Notification */}
           <button
+            onClick={() => setNotifOpen(true)}
             className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Notifications"
           >
@@ -198,6 +203,7 @@ function Index() {
           </button>
           {/* Settings */}
           <button
+            onClick={() => setSettingsOpen(true)}
             className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Settings"
           >
@@ -775,6 +781,18 @@ function Index() {
       {/* Mobile Menu Bottom Sheet */}
       {menuOpen && typeof document !== "undefined" && createPortal(
         <MobileMenuSheet onClose={() => setMenuOpen(false)} theme={theme} />,
+        document.body
+      )}
+
+      {/* Notifications Sheet */}
+      {notifOpen && typeof document !== "undefined" && createPortal(
+        <NotificationsSheet onClose={() => setNotifOpen(false)} theme={theme} />,
+        document.body
+      )}
+
+      {/* Settings Sheet */}
+      {settingsOpen && typeof document !== "undefined" && createPortal(
+        <SettingsSheet onClose={() => setSettingsOpen(false)} theme={theme} toggleTheme={toggleTheme} />,
         document.body
       )}
 

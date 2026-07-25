@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   Star,
   ChevronDown,
@@ -14,6 +15,8 @@ import {
   Menu,
 } from "lucide-react";
 import { PairSelectorPanel } from "./PairSelectorPanel";
+import { NotificationsSheet } from "./NotificationsSheet";
+import { SettingsSheet } from "./SettingsSheet";
 
 /* ─── Seeded PRNG ────────────────────────────────────── */
 function seededRand(seed: number) {
@@ -194,6 +197,8 @@ export function ChartOverlay({
   const [timeframe, setTimeframe] = useState("1D");
   const [bottomTab, setBottomTab] = useState("Open Orders");
   const [pairsOpen, setPairsOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const currentPrice = 63934.3;
 
@@ -231,11 +236,13 @@ export function ChartOverlay({
           <button
             className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Notifications"
+            onClick={() => setNotifOpen(true)}
           >
             <Bell className="h-[15px] w-[15px] text-trade-text/70" />
           </button>
           {/* Settings */}
           <button
+            onClick={() => setSettingsOpen(true)}
             className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Settings"
           >
@@ -476,6 +483,18 @@ export function ChartOverlay({
 
       {/* Pair selector panel */}
       <PairSelectorPanel open={pairsOpen} onClose={() => setPairsOpen(false)} />
+
+      {/* Notifications Sheet */}
+      {notifOpen && typeof document !== "undefined" && createPortal(
+        <NotificationsSheet onClose={() => setNotifOpen(false)} theme={theme} />,
+        document.body
+      )}
+
+      {/* Settings Sheet */}
+      {settingsOpen && typeof document !== "undefined" && createPortal(
+        <SettingsSheet onClose={() => setSettingsOpen(false)} theme={theme} toggleTheme={toggleTheme} />,
+        document.body
+      )}
     </div>
   );
 }
