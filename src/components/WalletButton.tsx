@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { Wallet, Copy, LogOut, Check, X } from "lucide-react";
+import { usePrivy, useWallets, useFundWallet } from "@privy-io/react-auth";
+import { Wallet, Copy, LogOut, Check, X, Plus } from "lucide-react";
+import { bsc } from "viem/chains";
 
 /* ─── helpers ─────────────────────────────────────────────────── */
 
@@ -16,10 +17,12 @@ function WalletSheet({
   address,
   onClose,
   onDisconnect,
+  onAddFunds,
 }: {
   address: string | null;
   onClose: () => void;
   onDisconnect: () => void;
+  onAddFunds: () => void;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -84,7 +87,17 @@ function WalletSheet({
             </button>
           </div>
 
-          <div className="border-t border-trade-text/8 mb-5" />
+          {/* Add Funds */}
+          <button
+            onClick={onAddFunds}
+            className="w-full py-3.5 rounded-2xl text-[15px] font-bold flex items-center justify-center gap-2 active:opacity-70 transition-opacity mb-3"
+            style={{ background: "rgba(240,185,11,0.12)", color: "#f0b90b" }}
+          >
+            <Plus className="h-4 w-4" />
+            Add Funds
+          </button>
+
+          <div className="border-t border-trade-text/8 mb-3" />
 
           {/* Disconnect */}
           <button
@@ -111,10 +124,17 @@ interface WalletButtonProps {
 export function WalletButton({ fullWidth = false }: WalletButtonProps) {
   const { ready, authenticated, login, logout } = usePrivy();
   const { wallets } = useWallets();
+  const { fundWallet } = useFundWallet();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   // useWallets returns all wallet types (EVM + Solana); pick the first available
   const address = wallets[0]?.address ?? null;
+
+  async function handleAddFunds() {
+    if (!address) return;
+    setSheetOpen(false);
+    await fundWallet(address, { chain: bsc });
+  }
 
   /* ── Not ready (Privy loading) ── */
   if (!ready) {
@@ -188,6 +208,7 @@ export function WalletButton({ fullWidth = false }: WalletButtonProps) {
           address={address}
           onClose={() => setSheetOpen(false)}
           onDisconnect={() => { logout(); setSheetOpen(false); }}
+          onAddFunds={handleAddFunds}
         />
       )}
     </>
