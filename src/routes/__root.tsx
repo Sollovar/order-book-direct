@@ -118,6 +118,9 @@ function RootShell({ children }: { children: ReactNode }) {
             background: #0d0d0d;
             transition: opacity 0.4s ease, visibility 0.4s ease;
           }
+          #asterdex-loader.light {
+            background: #f5f5f0;
+          }
           #asterdex-loader.loaded {
             opacity: 0;
             visibility: hidden;
@@ -164,6 +167,9 @@ function RootShell({ children }: { children: ReactNode }) {
             font-family: system-ui, -apple-system, sans-serif;
             text-transform: uppercase;
           }
+          #asterdex-loader.light .al-label {
+            color: rgba(0,0,0,0.35);
+          }
           @keyframes al-spin {
             to { transform: rotate(360deg); }
           }
@@ -171,7 +177,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         {/* Page loader — visible immediately, removed by RootComponent on mount */}
-        <div id="asterdex-loader" aria-hidden="true">
+        <div id="asterdex-loader" aria-hidden="true" suppressHydrationWarning>
           <div className="al-ring">
             {/* Spinning gold arc */}
             <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -192,6 +198,17 @@ function RootShell({ children }: { children: ReactNode }) {
           </div>
           <p className="al-label">AsterDex</p>
         </div>
+        {/* Runs synchronously right after the loader div exists — before any paint */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function(){
+            try {
+              var saved = localStorage.getItem('asterdex-theme');
+              var isLight = saved === 'light' ||
+                (!saved && !window.matchMedia('(prefers-color-scheme: dark)').matches);
+              if (isLight) document.getElementById('asterdex-loader').classList.add('light');
+            } catch(e){}
+          })();
+        ` }} />
 
         {children}
         <Scripts />
