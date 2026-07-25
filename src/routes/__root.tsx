@@ -105,8 +105,94 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* Page loader styles — inlined so they're available before any CSS bundle */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          #asterdex-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0d0d0d;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+          }
+          #asterdex-loader.loaded {
+            opacity: 0;
+            visibility: hidden;
+          }
+          .al-ring {
+            position: relative;
+            width: 72px;
+            height: 72px;
+          }
+          .al-ring svg {
+            position: absolute;
+            inset: 0;
+            animation: al-spin 1.1s linear infinite;
+          }
+          .al-logo {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .al-logo-inner {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0b90b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .al-logo-inner span {
+            font-size: 17px;
+            font-weight: 800;
+            color: #000;
+            font-family: system-ui, -apple-system, sans-serif;
+            letter-spacing: -0.5px;
+          }
+          .al-label {
+            margin-top: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.35);
+            font-family: system-ui, -apple-system, sans-serif;
+            text-transform: uppercase;
+          }
+          @keyframes al-spin {
+            to { transform: rotate(360deg); }
+          }
+        ` }} />
       </head>
       <body>
+        {/* Page loader — visible immediately, removed by RootComponent on mount */}
+        <div id="asterdex-loader" aria-hidden="true">
+          <div className="al-ring">
+            {/* Spinning gold arc */}
+            <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="36" cy="36" r="32" stroke="rgba(240,185,11,0.15)" strokeWidth="3.5" />
+              <path
+                d="M36 4 A32 32 0 0 1 68 36"
+                stroke="#f0b90b"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </svg>
+            {/* Logo mark */}
+            <div className="al-logo">
+              <div className="al-logo-inner">
+                <span>A</span>
+              </div>
+            </div>
+          </div>
+          <p className="al-label">AsterDex</p>
+        </div>
+
         {children}
         <Scripts />
       </body>
@@ -116,6 +202,17 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    const loader = document.getElementById("asterdex-loader");
+    if (!loader) return;
+    // Small delay so the first frame of the actual UI paints before we fade out
+    const t = setTimeout(() => {
+      loader.classList.add("loaded");
+      loader.addEventListener("transitionend", () => loader.remove(), { once: true });
+    }, 120);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
