@@ -7,6 +7,20 @@ export interface PriceAlert {
 }
 
 const STORAGE_KEY = "asterdex-price-alerts";
+const FAVORITES_KEY = "asterdex-favorites";
+
+export function loadFavorites(): string[] {
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveFavorites(symbols: string[]): void {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(symbols));
+}
 
 export function loadAlerts(): PriceAlert[] {
   try {

@@ -1,8 +1,9 @@
 import { Search, Star, X, Bell, BellPlus, ChevronUp, ChevronDown, Trash2 } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { PAIRS, type Pair } from "../lib/pairs";
 import type { PriceAlert } from "../lib/alerts";
+import { loadFavorites, saveFavorites } from "../lib/alerts";
 
 interface PairSelectorPanelProps {
   open: boolean;
@@ -223,13 +224,17 @@ function PriceAlertSheet({
 function PairRow({
   p,
   hasAlert,
+  isFavorite,
   onSelect,
   onLongPress,
+  onToggleFavorite,
 }: {
   p: Pair;
   hasAlert: boolean;
+  isFavorite: boolean;
   onSelect: () => void;
   onLongPress: (pair: Pair) => void;
+  onToggleFavorite: (symbol: string) => void;
 }) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [pressing, setPressing] = useState(false);
@@ -278,11 +283,24 @@ function PairRow({
         className="sticky left-0 z-10 flex items-center gap-2 bg-trade-card w-[148px] flex-shrink-0 px-4 py-3"
         style={{ boxShadow: "4px 0 8px -2px rgba(0,0,0,0.12)" }}
       >
-        {hasAlert ? (
-          <Bell className="h-3.5 w-3.5 text-[#f0b90b] flex-shrink-0" />
-        ) : (
-          <Star className="h-3.5 w-3.5 text-trade-text/20 flex-shrink-0" />
-        )}
+        {/* Star / alert icon — tappable, stops row-select propagation */}
+        <button
+          className="flex-shrink-0 active:scale-110 transition-transform z-20 relative"
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(p.symbol);
+          }}
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        >
+          {hasAlert ? (
+            <Bell className="h-3.5 w-3.5 text-[#f0b90b]" />
+          ) : isFavorite ? (
+            <Star className="h-3.5 w-3.5 text-[#f0b90b] fill-[#f0b90b]" />
+          ) : (
+            <Star className="h-3.5 w-3.5 text-trade-text/30" />
+          )}
+        </button>
         <div
           className="h-6 w-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
           style={{ backgroundColor: p.color }}
@@ -336,15 +354,31 @@ export function PairSelectorPanel({
   const [filter, setFilter] = useState("All");
   const [alertPair, setAlertPair] = useState<Pair | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => { setIsMounted(true); }, []);
+
+  // Load favorites from localStorage once mounted
+  useEffect(() => {
+    if (isMounted) setFavorites(loadFavorites());
+  }, [isMounted]);
+
+  const toggleFavorite = useCallback((symbol: string) => {
+    setFavorites((prev) => {
+      const next = prev.includes(symbol)
+        ? prev.filter((s) => s !== symbol)
+        : [...prev, symbol];
+      saveFavorites(next);
+      return next;
+    });
+  }, []);
 
   const FILTERS = ["All", "Favorites", "Gainers", "Losers", "Volume", "Trending"];
 
   function applyFilter(pairs: Pair[]) {
     switch (filter) {
       case "Favorites":
-        return pairs.filter((p) => alerts.some((a) => a.symbol === p.symbol));
+        return pairs.filter((p) => favorites.includes(p.symbol));
       case "Gainers":
         return [...pairs].filter((p) => p.up).sort((a, b) =>
           parseFloat(b.change) - parseFloat(a.change)
@@ -498,8 +532,10 @@ export function PairSelectorPanel({
                 key={p.symbol}
                 p={p}
                 hasAlert={alerts.some((a) => a.symbol === p.symbol)}
+                isFavorite={favorites.includes(p.symbol)}
                 onSelect={onClose}
                 onLongPress={(pair) => setAlertPair(pair)}
+                onToggleFavorite={toggleFavorite}
               />
             ))}
 
