@@ -1,6 +1,12 @@
 # AsterDex
 
-A perpetuals (perps) DEX landing page built with TanStack Start, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui components. Originally created in Lovable.
+An on-chain perpetuals trading exchange UI built with TanStack Start, React 19, TypeScript, and Tailwind CSS v4. Originally built with [Lovable](https://lovable.dev).
+
+## Features
+- Landing page with animated order-book terminal preview
+- Trade view with real-time order book, pair selector, chart overlay, notifications, and settings panels
+- Light/dark theme toggle
+- No backend required — all UI with simulated/static data
 
 ## How to run
 
@@ -9,34 +15,15 @@ bun install
 bun run dev
 ```
 
-The dev server starts on port 5000. On Replit, the **Start application** workflow handles this automatically.
+The dev server starts on port 5000.
 
 ## Stack
-
-- **TanStack Start** — SSR-capable React meta-framework
-- **TanStack Router** — file-based routing (`src/routes/`)
+- **TanStack Start** (SSR + file-based routing)
 - **React 19** + **TypeScript**
-- **Tailwind CSS v4** via `@tailwindcss/vite`
-- **shadcn/ui** (Radix UI primitives) in `src/components/ui/`
-- **Vite** for bundling (`vite.config.ts` via `@lovable.dev/vite-tanstack-config`)
-- **Bun** as the runtime/package manager on Replit
-
-## Project structure
-
-```
-src/
-  routes/         # File-based TanStack Router pages
-    __root.tsx    # Root layout
-    index.tsx     # Landing page (/)
-    trade.tsx     # Trade page (/trade)
-  components/     # Shared components (ui/, feature components)
-  lib/            # Utilities
-  styles.css      # Global styles (Tailwind)
-  router.tsx      # Router setup
-  server.ts       # SSR server entry
-  start.ts        # App entry point
-```
+- **Tailwind CSS v4** + **shadcn/ui** components (Radix UI)
+- **TanStack Query** for data fetching
+- **Vite** as the build tool
+- **Bun** as the package manager and runtime
 
 ## User preferences
-
-- Keep existing file structure and stack unless asked to change it.
+<!-- Add any preferences here -->
