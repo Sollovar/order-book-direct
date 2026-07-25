@@ -298,19 +298,27 @@ function PairRow({
       </div>
 
       {/* Vol / OI */}
-      <div className="flex flex-col items-end mr-4 text-right relative z-10">
+      <div className="flex flex-col items-end text-right flex-1 relative z-10">
         <span className="text-[12px] text-trade-text">{p.vol}</span>
         <span className="text-[11px] text-trade-text-muted">{p.oi}</span>
       </div>
 
       {/* Price / change */}
-      <div className="flex flex-col items-end text-right w-[70px] relative z-10">
+      <div className="flex flex-col items-end text-right w-[68px] relative z-10">
         <span className="text-[12px] text-trade-text">{p.price}</span>
-        <span
-          className={`text-[11px] font-medium ${p.up ? "text-trade-bid" : "text-trade-ask"}`}
-        >
+        <span className={`text-[11px] font-medium ${p.up ? "text-trade-bid" : "text-trade-ask"}`}>
           {p.change}
         </span>
+      </div>
+
+      {/* Liquidity */}
+      <div className="flex flex-col items-end text-right w-[56px] relative z-10">
+        <span className="text-[12px] text-trade-text">{p.liquidity}</span>
+      </div>
+
+      {/* Market Cap */}
+      <div className="flex flex-col items-end text-right w-[56px] relative z-10">
+        <span className="text-[12px] text-trade-text">{p.marketCap}</span>
       </div>
     </div>
   );
@@ -403,17 +411,16 @@ export function PairSelectorPanel({
         </div>
 
         {/* Filter tabs */}
-        <div className="flex items-center gap-2 px-4 pb-3 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-5 px-4 pb-3 overflow-x-auto no-scrollbar border-b border-trade-text/8">
           {FILTERS.map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className="flex-shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all"
-              style={
+              className={`flex-shrink-0 pb-2.5 text-[13px] font-medium border-b-2 transition-colors ${
                 filter === f
-                  ? { backgroundColor: "#f0b90b", color: "#000" }
-                  : { backgroundColor: "rgba(128,128,128,0.1)", color: "var(--trade-text-muted)" }
-              }
+                  ? "border-[#f0b90b] text-trade-text"
+                  : "border-transparent text-trade-text-muted"
+              }`}
             >
               {f}
             </button>
@@ -422,14 +429,20 @@ export function PairSelectorPanel({
 
         {/* Column headers */}
         <div className="flex items-end justify-between px-4 pb-2 pt-1">
-          <span className="text-[11px] text-trade-text-muted">Symbols</span>
-          <div className="flex flex-col items-end text-right">
+          <span className="text-[11px] text-trade-text-muted w-[90px]">Symbols</span>
+          <div className="flex flex-col items-end text-right flex-1">
             <span className="text-[11px] text-trade-text-muted">Volume</span>
             <span className="text-[11px] text-trade-text-muted">Open interest</span>
           </div>
-          <div className="flex flex-col items-end text-right">
+          <div className="flex flex-col items-end text-right w-[68px]">
             <span className="text-[11px] text-trade-text-muted">Price</span>
             <span className="text-[11px] text-trade-text-muted">24h change</span>
+          </div>
+          <div className="flex flex-col items-end text-right w-[56px]">
+            <span className="text-[11px] text-trade-text-muted">Liquidity</span>
+          </div>
+          <div className="flex flex-col items-end text-right w-[56px]">
+            <span className="text-[11px] text-trade-text-muted">Mkt Cap</span>
           </div>
         </div>
 
