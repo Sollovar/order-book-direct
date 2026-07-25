@@ -177,9 +177,9 @@ export function WalletButton({ fullWidth = false }: WalletButtonProps) {
     <>
       <button
         onClick={() => setSheetOpen(true)}
-        className="flex items-center gap-1.5 rounded-full bg-trade-surface border border-[#f0b90b]/30 pl-2.5 pr-3 py-1.5 text-[13px] font-semibold text-trade-text active:opacity-70 transition-all"
+        className="flex items-center gap-1.5 rounded-full bg-trade-surface border border-[#f0b90b]/30 pl-2.5 pr-3 py-1.5 text-[13px] font-semibold text-[#f0b90b] active:opacity-70 transition-all"
       >
-        <span className="h-2 w-2 rounded-full bg-[#22c55e] flex-shrink-0" />
+        <Wallet className="h-3.5 w-3.5 flex-shrink-0" />
         {truncate(address ?? "Connected")}
       </button>
 
