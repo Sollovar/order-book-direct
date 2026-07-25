@@ -1,4 +1,4 @@
-import { X, Globe, Volume2, Bell, Moon, Sun } from "lucide-react";
+import { X, Globe, Volume2, Bell, Moon, Sun, Check, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 interface SettingsSheetProps {
@@ -28,9 +28,93 @@ function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
   );
 }
 
+const LANGUAGES = [
+  "English",
+  "Deutsch",
+  "Español (Latinoamérica)",
+  "日本語",
+  "한국어",
+  "Polski",
+  "Português (Brasil)",
+  "Русский",
+  "Türkçe",
+  "简体中文",
+  "繁體中文",
+];
+
+function LanguageSheet({
+  selectedLanguage,
+  onSelect,
+  onClose,
+}: {
+  selectedLanguage: string;
+  onSelect: (lang: string) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="absolute inset-0 flex flex-col justify-end"
+      style={{ zIndex: 1 }}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        onClick={onClose}
+      />
+
+      {/* Sheet — same hamburger texture as parent */}
+      <div
+        className="relative bg-trade-card rounded-t-3xl shadow-2xl overflow-hidden"
+        style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))" }}
+      >
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
+        </div>
+
+        {/* Header row */}
+        <div className="flex items-center justify-between px-5 pt-2 pb-4">
+          <p className="text-[11px] text-trade-text-muted uppercase tracking-widest font-medium">Language</p>
+          <button
+            onClick={onClose}
+            className="h-7 w-7 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+            aria-label="Close language picker"
+          >
+            <X className="h-[14px] w-[14px] text-trade-text/70" />
+          </button>
+        </div>
+
+        {/* Language list */}
+        <div className="divide-y divide-trade-text/5 max-h-[60vh] overflow-y-auto">
+          {LANGUAGES.map((lang) => {
+            const active = lang === selectedLanguage;
+            return (
+              <button
+                key={lang}
+                onClick={() => { onSelect(lang); onClose(); }}
+                className="w-full flex items-center justify-between px-5 py-4 active:bg-trade-text/5 transition-colors"
+              >
+                <span
+                  className="text-[15px] text-left"
+                  style={{ color: active ? "#f0b90b" : "var(--color-trade-text, white)", fontWeight: active ? 600 : 400 }}
+                >
+                  {lang}
+                </span>
+                {active && <Check className="h-4 w-4 flex-shrink-0" style={{ color: "#f0b90b" }} />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProps) {
   const [fillSound, setFillSound] = useState(false);
   const [alertSound, setAlertSound] = useState(true);
+  const [language, setLanguage] = useState("English");
+  const [langOpen, setLangOpen] = useState(false);
 
   const rows = [
     {
@@ -42,14 +126,21 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
         <Toggle enabled={theme === "dark"} onToggle={toggleTheme} />
       ),
       sub: theme === "dark" ? "Dark" : "Light",
+      onClick: undefined,
     },
     {
       icon: Globe,
       iconColor: "#22c55e",
       iconBg: "rgba(34,197,94,0.12)",
       label: "Language",
-      right: <span className="text-[13px] text-trade-text-muted">English</span>,
+      right: (
+        <span className="flex items-center gap-1 text-[13px] text-trade-text-muted">
+          {language}
+          <ChevronRight className="h-3.5 w-3.5 opacity-50" />
+        </span>
+      ),
       sub: undefined,
+      onClick: () => setLangOpen(true),
     },
     {
       icon: Volume2,
@@ -58,6 +149,7 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
       label: "Fill Sounds",
       right: <Toggle enabled={fillSound} onToggle={() => setFillSound(v => !v)} />,
       sub: "Play a sound when an order is filled",
+      onClick: undefined,
     },
     {
       icon: Bell,
@@ -66,6 +158,7 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
       label: "Price Alert Sound",
       right: <Toggle enabled={alertSound} onToggle={() => setAlertSound(v => !v)} />,
       sub: "Play a sound when a price alert fires",
+      onClick: undefined,
     },
   ];
 
@@ -107,8 +200,12 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
 
         {/* Rows */}
         <div className="px-5 divide-y divide-trade-text/5">
-          {rows.map(({ icon: Icon, iconColor, iconBg, label, sub, right }) => (
-            <div key={label} className="flex items-center gap-3 py-3.5">
+          {rows.map(({ icon: Icon, iconColor, iconBg, label, sub, right, onClick }) => (
+            <div
+              key={label}
+              className={`flex items-center gap-3 py-3.5 ${onClick ? "cursor-pointer active:opacity-70 transition-opacity" : ""}`}
+              onClick={onClick}
+            >
               <span
                 className="h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ backgroundColor: iconBg }}
@@ -123,6 +220,15 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
             </div>
           ))}
         </div>
+
+        {/* Language picker sheet — anchored inside this sheet */}
+        {langOpen && (
+          <LanguageSheet
+            selectedLanguage={language}
+            onSelect={setLanguage}
+            onClose={() => setLangOpen(false)}
+          />
+        )}
       </div>
     </div>
   );
