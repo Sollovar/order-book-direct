@@ -16,6 +16,7 @@ import {
   Menu,
 } from "lucide-react";
 import { PairSelectorPanel } from "./PairSelectorPanel";
+import { LadderHistoryPanel } from "./LadderOrderSheet";
 import { NotificationsSheet } from "./NotificationsSheet";
 import { SettingsSheet } from "./SettingsSheet";
 
@@ -427,13 +428,17 @@ export function ChartOverlay({
               ))}
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center py-6 gap-3">
-            <div className="h-14 w-14 rounded-lg bg-trade-surface flex items-center justify-center relative">
-              <Link2 className="h-6 w-6 text-trade-text/40" />
-              <Search className="h-3.5 w-3.5 text-trade-text/60 absolute bottom-2 right-2" />
+          {bottomTab === "Ladder History" ? (
+            <LadderHistoryPanel />
+          ) : (
+            <div className="flex flex-col items-center justify-center py-6 gap-3">
+              <div className="h-14 w-14 rounded-lg bg-trade-surface flex items-center justify-center relative">
+                <Link2 className="h-6 w-6 text-trade-text/40" />
+                <Search className="h-3.5 w-3.5 text-trade-text/60 absolute bottom-2 right-2" />
+              </div>
+              <div className="text-trade-text-muted text-[13px]">Please connect a wallet first</div>
             </div>
-            <div className="text-trade-text-muted text-[13px]">Please connect a wallet first</div>
-          </div>
+          )}
         </section>
 
       </div>
