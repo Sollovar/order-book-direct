@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChartOverlay } from "../components/ChartOverlay";
 import { PairSelectorPanel } from "../components/PairSelectorPanel";
-import { NotificationsSheet } from "../components/NotificationsSheet";
+import { NotificationsSheet, type Notification } from "../components/NotificationsSheet";
 import { SettingsSheet } from "../components/SettingsSheet";
 import {
   ChevronDown,
@@ -124,8 +124,10 @@ function Index() {
     return saved === null ? true : saved === "true";
   });
   const [firedToast, setFiredToast] = useState<PriceAlert | null>(null);
+  const [alertNotifications, setAlertNotifications] = useState<Notification[]>([]);
   const alertSoundRef = useRef(alertSound);
   const simPricesRef = useRef<Record<string, number>>({});
+  const alertNotifIdRef = useRef(10000); // start above mock IDs
 
   // Persist alertSound preference
   useEffect(() => {
@@ -163,6 +165,18 @@ function Index() {
           if (alertSoundRef.current) playAlertSound();
           setFiredToast(fired[0]);
           setTimeout(() => setFiredToast(null), 4500);
+          // Add each fired alert as a notification in the notifications sheet
+          setAlertNotifications((prev) => [
+            ...fired.map((a) => ({
+              id: alertNotifIdRef.current++,
+              type: "alert" as const,
+              title: "Price Alert Hit",
+              body: `${a.symbol} moved ${a.direction === "above" ? "↑ above" : "↓ below"} ${a.price.toLocaleString()} USDT`,
+              time: "just now",
+              unread: true,
+            })),
+            ...prev,
+          ]);
         }
         return remaining;
       });
@@ -278,11 +292,17 @@ function Index() {
           </button>
           {/* Notification */}
           <button
-            onClick={() => setNotifOpen(true)}
-            className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
+            onClick={() => {
+              setNotifOpen(true);
+              setAlertNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+            }}
+            className="relative h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Notifications"
           >
             <Bell className="h-[15px] w-[15px] text-trade-text/70" />
+            {alertNotifications.some((n) => n.unread) && (
+              <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-[#ef4444] border border-trade-bg" />
+            )}
           </button>
           {/* Settings */}
           <button
@@ -810,10 +830,8 @@ function Index() {
       {/* Price alert fired toast */}
       {firedToast && (
         <div
-          className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
+          className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl bg-trade-card border border-[#f0b90b]/30"
           style={{
-            background: "rgba(20,20,20,0.95)",
-            border: "1px solid rgba(240,185,11,0.35)",
             backdropFilter: "blur(12px)",
             minWidth: 260,
             animation: "slide-down 0.25s ease",
@@ -821,10 +839,10 @@ function Index() {
         >
           <Bell className="h-4 w-4 flex-shrink-0" style={{ color: "#f0b90b" }} />
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-bold text-white leading-tight">
-              Price Alert Fired
+            <p className="text-[13px] font-bold text-trade-text leading-tight">
+              Price Alert Hit
             </p>
-            <p className="text-[12px] text-white/60 mt-0.5">
+            <p className="text-[12px] text-trade-text-muted mt-0.5">
               {firedToast.symbol}{" "}
               {firedToast.direction === "above" ? "↑ above" : "↓ below"}{" "}
               {firedToast.price.toLocaleString()} USDT
@@ -832,9 +850,9 @@ function Index() {
           </div>
           <button
             onClick={() => setFiredToast(null)}
-            className="h-6 w-6 flex items-center justify-center rounded-full bg-white/10 active:opacity-60"
+            className="h-6 w-6 flex items-center justify-center rounded-full bg-trade-text/10 active:opacity-60"
           >
-            <X className="h-3 w-3 text-white/60" />
+            <X className="h-3 w-3 text-trade-text/50" />
           </button>
         </div>
       )}
@@ -908,7 +926,11 @@ function Index() {
 
       {/* Notifications Sheet */}
       {notifOpen && typeof document !== "undefined" && createPortal(
-        <NotificationsSheet onClose={() => setNotifOpen(false)} theme={theme} />,
+        <NotificationsSheet
+          onClose={() => setNotifOpen(false)}
+          theme={theme}
+          alertNotifications={alertNotifications}
+        />,
         document.body
       )}
 

@@ -1,7 +1,7 @@
-import { X, Bell, TrendingUp, Zap, AlertCircle, Gift, CheckCircle2 } from "lucide-react";
+import { X, Bell, Zap, AlertCircle, Gift, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
-interface Notification {
+export interface Notification {
   id: number;
   type: "fill" | "funding" | "alert" | "system" | "reward";
   title: string;
@@ -83,10 +83,14 @@ const TYPE_META: Record<
 interface NotificationsSheetProps {
   onClose: () => void;
   theme: "light" | "dark";
+  alertNotifications?: Notification[];
 }
 
-export function NotificationsSheet({ onClose, theme }: NotificationsSheetProps) {
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+export function NotificationsSheet({ onClose, theme, alertNotifications = [] }: NotificationsSheetProps) {
+  const [notifications, setNotifications] = useState<Notification[]>(() => [
+    ...alertNotifications,
+    ...MOCK_NOTIFICATIONS,
+  ]);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 
