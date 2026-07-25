@@ -252,7 +252,7 @@ function PairRow({
 
   return (
     <div
-      className="relative w-full flex items-center px-4 py-3 border-b border-trade-text/5 select-none overflow-hidden"
+      className="relative flex items-center border-b border-trade-text/5 select-none"
       style={{ cursor: "pointer" }}
       onPointerDown={startPress}
       onPointerUp={() => {
@@ -267,57 +267,55 @@ function PairRow({
       {/* Long-press fill progress */}
       {pressing && (
         <span
-          className="absolute inset-0 origin-left bg-trade-text/8"
+          className="absolute inset-0 origin-left bg-trade-text/8 z-0"
           style={{ animation: "lp-fill 2s linear forwards" }}
         />
       )}
 
-      {/* Star / bell indicator */}
-      {hasAlert ? (
-        <Bell className="h-4 w-4 text-[#f0b90b] mr-3 flex-shrink-0 relative z-10" />
-      ) : (
-        <Star className="h-4 w-4 text-trade-text/25 mr-3 flex-shrink-0 relative z-10" />
-      )}
-
-      {/* Icon */}
+      {/* ── Sticky symbol cell ── */}
       <div
-        className="h-7 w-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mr-2.5 relative z-10"
-        style={{ backgroundColor: p.color }}
+        className="sticky left-0 z-10 flex items-center gap-2 bg-trade-card w-[148px] flex-shrink-0 px-4 py-3"
+        style={{ boxShadow: "4px 0 8px -2px rgba(0,0,0,0.12)" }}
       >
-        {p.base.slice(0, 2)}
+        {hasAlert ? (
+          <Bell className="h-3.5 w-3.5 text-[#f0b90b] flex-shrink-0" />
+        ) : (
+          <Star className="h-3.5 w-3.5 text-trade-text/20 flex-shrink-0" />
+        )}
+        <div
+          className="h-6 w-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
+          style={{ backgroundColor: p.color }}
+        >
+          {p.base.slice(0, 2)}
+        </div>
+        <div className="flex flex-col min-w-0">
+          <span className="text-[12px] font-semibold text-trade-text leading-tight truncate">
+            {p.symbol}
+          </span>
+          <span className="text-[9px] text-trade-text-muted bg-trade-surface rounded px-1 mt-0.5 w-fit">
+            {p.lev}
+          </span>
+        </div>
       </div>
 
-      {/* Symbol + lev */}
-      <div className="flex flex-col items-start min-w-0 flex-1 relative z-10">
-        <span className="text-[13px] font-semibold text-trade-text leading-tight">
-          {p.symbol}
-        </span>
-        <span className="text-[10px] text-trade-text-muted bg-trade-surface rounded px-1 mt-0.5">
-          {p.lev}
-        </span>
-      </div>
-
-      {/* Vol / OI */}
-      <div className="flex flex-col items-end text-right flex-1 relative z-10">
+      {/* ── Scrollable data cells ── */}
+      <div className="flex flex-col items-end text-right w-[108px] flex-shrink-0 py-3 pr-3">
         <span className="text-[12px] text-trade-text">{p.vol}</span>
         <span className="text-[11px] text-trade-text-muted">{p.oi}</span>
       </div>
 
-      {/* Price / change */}
-      <div className="flex flex-col items-end text-right w-[68px] relative z-10">
+      <div className="flex flex-col items-end text-right w-[90px] flex-shrink-0 py-3 pr-3">
         <span className="text-[12px] text-trade-text">{p.price}</span>
         <span className={`text-[11px] font-medium ${p.up ? "text-trade-bid" : "text-trade-ask"}`}>
           {p.change}
         </span>
       </div>
 
-      {/* Liquidity */}
-      <div className="flex flex-col items-end text-right w-[56px] relative z-10">
+      <div className="flex flex-col items-end text-right w-[80px] flex-shrink-0 py-3 pr-3">
         <span className="text-[12px] text-trade-text">{p.liquidity}</span>
       </div>
 
-      {/* Market Cap */}
-      <div className="flex flex-col items-end text-right w-[56px] relative z-10">
+      <div className="flex flex-col items-end text-right w-[80px] flex-shrink-0 py-3 pr-4">
         <span className="text-[12px] text-trade-text">{p.marketCap}</span>
       </div>
     </div>
@@ -427,50 +425,63 @@ export function PairSelectorPanel({
           ))}
         </div>
 
-        {/* Column headers */}
-        <div className="flex items-end justify-between px-4 pb-2 pt-1">
-          <span className="text-[11px] text-trade-text-muted w-[90px]">Symbols</span>
-          <div className="flex flex-col items-end text-right flex-1">
-            <span className="text-[11px] text-trade-text-muted">Volume</span>
-            <span className="text-[11px] text-trade-text-muted">Open interest</span>
-          </div>
-          <div className="flex flex-col items-end text-right w-[68px]">
-            <span className="text-[11px] text-trade-text-muted">Price</span>
-            <span className="text-[11px] text-trade-text-muted">24h change</span>
-          </div>
-          <div className="flex flex-col items-end text-right w-[56px]">
-            <span className="text-[11px] text-trade-text-muted">Liquidity</span>
-          </div>
-          <div className="flex flex-col items-end text-right w-[56px]">
-            <span className="text-[11px] text-trade-text-muted">Mkt Cap</span>
-          </div>
-        </div>
+        {/* Pairs list — horizontally scrollable, symbol column sticky */}
+        <div className="flex-1 overflow-y-auto overflow-x-auto no-scrollbar">
+          <div style={{ minWidth: 520 }}>
 
-        {/* Pairs list */}
-        <div className="flex-1 overflow-y-auto">
-          {/* Hold-to-alert hint */}
-          <div className="flex items-center gap-1.5 px-4 py-2 bg-trade-surface/50 border-b border-trade-text/5">
-            <Bell className="h-3 w-3 text-trade-text/30 flex-shrink-0" />
-            <span className="text-[11px] text-trade-text/30">
-              Hold a pair for 2 seconds to set a price alert
-            </span>
-          </div>
+            {/* Hold-to-alert hint */}
+            <div className="flex items-center gap-1.5 px-4 py-2 bg-trade-surface/50 border-b border-trade-text/5">
+              <Bell className="h-3 w-3 text-trade-text/30 flex-shrink-0" />
+              <span className="text-[11px] text-trade-text/30">
+                Hold a pair for 2 seconds to set a price alert
+              </span>
+            </div>
 
-          {applyFilter(
-            PAIRS.filter(
-              (p) =>
-                search === "" ||
-                p.symbol.toLowerCase().includes(search.toLowerCase()),
-            )
-          ).map((p) => (
-            <PairRow
-              key={p.symbol}
-              p={p}
-              hasAlert={alerts.some((a) => a.symbol === p.symbol)}
-              onSelect={onClose}
-              onLongPress={(pair) => setAlertPair(pair)}
-            />
-          ))}
+            {/* Column headers */}
+            <div className="flex items-end border-b border-trade-text/8 bg-trade-card">
+              {/* Sticky symbol header */}
+              <div
+                className="sticky left-0 z-10 bg-trade-card w-[148px] flex-shrink-0 px-4 pb-2 pt-1"
+                style={{ boxShadow: "4px 0 8px -2px rgba(0,0,0,0.12)" }}
+              >
+                <span className="text-[11px] text-trade-text-muted">Symbol</span>
+              </div>
+              <div className="w-[108px] flex-shrink-0 pr-3 pb-2 pt-1 text-right">
+                <span className="text-[11px] text-trade-text-muted">Volume</span>
+                <br />
+                <span className="text-[11px] text-trade-text-muted">Open interest</span>
+              </div>
+              <div className="w-[90px] flex-shrink-0 pr-3 pb-2 pt-1 text-right">
+                <span className="text-[11px] text-trade-text-muted">Price</span>
+                <br />
+                <span className="text-[11px] text-trade-text-muted">24h change</span>
+              </div>
+              <div className="w-[80px] flex-shrink-0 pr-3 pb-2 pt-1 text-right">
+                <span className="text-[11px] text-trade-text-muted">Liquidity</span>
+              </div>
+              <div className="w-[80px] flex-shrink-0 pr-4 pb-2 pt-1 text-right">
+                <span className="text-[11px] text-trade-text-muted">Mkt Cap</span>
+              </div>
+            </div>
+
+            {/* Rows */}
+            {applyFilter(
+              PAIRS.filter(
+                (p) =>
+                  search === "" ||
+                  p.symbol.toLowerCase().includes(search.toLowerCase()),
+              )
+            ).map((p) => (
+              <PairRow
+                key={p.symbol}
+                p={p}
+                hasAlert={alerts.some((a) => a.symbol === p.symbol)}
+                onSelect={onClose}
+                onLongPress={(pair) => setAlertPair(pair)}
+              />
+            ))}
+
+          </div>
         </div>
       </div>
 
