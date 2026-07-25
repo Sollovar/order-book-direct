@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChartOverlay } from "../components/ChartOverlay";
 import { LadderHistoryPanel } from "../components/LadderOrderSheet";
+import { WalletButton } from "../components/WalletButton";
 import { PairSelectorPanel } from "../components/PairSelectorPanel";
 import { NotificationsSheet, type Notification } from "../components/NotificationsSheet";
 import { SettingsSheet } from "../components/SettingsSheet";
@@ -121,6 +122,7 @@ function Index() {
   // ── Price alerts (persisted to localStorage) ──────────────────────────────
   const [alerts, setAlerts] = useState<PriceAlert[]>(() => loadAlerts());
   const [alertSound, setAlertSound] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
     const saved = localStorage.getItem("asterdex-alert-sound");
     return saved === null ? true : saved === "true";
   });
@@ -294,11 +296,8 @@ function Index() {
           <div className="h-4 w-4 rounded-full border-2 border-trade-text/70 border-t-transparent rotate-45" />
         </div>
         <div className="flex items-center gap-2">
-          {/* Connect — gold, wallet icon, matches trading panel */}
-          <button className="flex items-center gap-1.5 rounded-full bg-[#f0b90b] text-[#1a1200] pl-2.5 pr-3.5 py-1.5 text-[13px] font-bold active:brightness-90 transition-all shadow-sm">
-            <Wallet className="h-3.5 w-3.5" />
-            Connect
-          </button>
+          {/* Connect / wallet — handled by Privy */}
+          <WalletButton />
           {/* Notification */}
           <button
             onClick={() => setNotifOpen(true)}
@@ -790,10 +789,7 @@ function Index() {
               <Line label="Order value" value="0.00 USDT" />
             </div>
 
-            <button className="w-full rounded-full bg-[#f0b90b] text-[#1a1200] py-2.5 text-[14px] font-bold mt-1 flex items-center justify-center gap-2">
-              <Wallet className="h-4 w-4" />
-              Connect
-            </button>
+            <WalletButton fullWidth />
           </div>
         </div>
       </section>

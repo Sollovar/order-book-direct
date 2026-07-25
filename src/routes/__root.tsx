@@ -8,6 +8,9 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { PrivyProvider } from "@privy-io/react-auth";
+import { bsc, base } from "viem/chains";
+
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -219,7 +222,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-
   useEffect(() => {
     const loader = document.getElementById("asterdex-loader");
     if (!loader) return;
@@ -232,9 +234,45 @@ function RootComponent() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-    </QueryClientProvider>
+    <PrivyProvider
+      appId="cms0pzb0200dw0bldfjr80r0g"
+      config={{
+        loginMethods: [
+          "email",
+          "sms",
+          "wallet",
+          "google",
+          "twitter",
+          "discord",
+          "github",
+          "linkedin",
+          "spotify",
+          "instagram",
+          "tiktok",
+          "apple",
+          "farcaster",
+        ],
+        appearance: {
+          theme: "dark",
+          accentColor: "#f0b90b",
+        },
+        defaultChain: bsc,
+        supportedChains: [bsc, base],
+        solanaClusters: [
+          {
+            name: "mainnet-beta",
+            rpcUrl: "https://api.mainnet-beta.solana.com",
+          },
+        ],
+        embeddedWallets: {
+          createOnLogin: "users-without-wallets",
+        },
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </QueryClientProvider>
+    </PrivyProvider>
   );
 }

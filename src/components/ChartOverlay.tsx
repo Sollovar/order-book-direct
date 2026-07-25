@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { PairSelectorPanel } from "./PairSelectorPanel";
 import { LadderHistoryPanel } from "./LadderOrderSheet";
+import { WalletButton } from "./WalletButton";
 import { NotificationsSheet } from "./NotificationsSheet";
 import { SettingsSheet } from "./SettingsSheet";
 
@@ -229,11 +230,8 @@ export function ChartOverlay({
           <div className="h-4 w-4 rounded-full border-2 border-trade-text/70 border-t-transparent rotate-45" />
         </div>
         <div className="flex items-center gap-2">
-          {/* Connect — gold, wallet icon, matches trading panel */}
-          <button className="flex items-center gap-1.5 rounded-full bg-[#f0b90b] text-[#1a1200] pl-2.5 pr-3.5 py-1.5 text-[13px] font-bold active:brightness-90 transition-all shadow-sm">
-            <Wallet className="h-3.5 w-3.5" />
-            Connect
-          </button>
+          {/* Connect / wallet — handled by Privy */}
+          <WalletButton />
           {/* Notification */}
           <button
             className="h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
