@@ -794,7 +794,7 @@ function Index() {
         <div className="fixed inset-0 flex flex-col justify-end" style={{ zIndex: 9999 }}>
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/60"
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
             onClick={() => setOrderTypeSheetOpen(false)}
           />
           {/* Sheet */}
@@ -1086,6 +1086,15 @@ function TickSizeSheet({
         <div className="flex justify-center pt-3 pb-1">
           <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
         </div>
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+          aria-label="Close"
+        >
+          <X className="h-[15px] w-[15px] text-trade-text/70" />
+        </button>
 
         {/* Options */}
         <div className="px-6 pt-3">
