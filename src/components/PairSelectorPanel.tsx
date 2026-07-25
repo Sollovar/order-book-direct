@@ -48,13 +48,19 @@ function PriceAlertSheet({
 
       {/* Sheet — hamburger texture */}
       <div
-        className="relative bg-trade-card rounded-t-3xl shadow-2xl overflow-hidden"
-        style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))" }}
+        className="relative bg-trade-card rounded-t-3xl shadow-2xl flex flex-col"
+        style={{ maxHeight: "85vh" }}
       >
         {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-1">
+        <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
           <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
         </div>
+
+        {/* Scrollable body — keyboard-safe */}
+        <div
+          className="overflow-y-auto"
+          style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))" }}
+        >
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-2 pb-4">
@@ -150,9 +156,11 @@ function PriceAlertSheet({
               type="number"
               value={targetPrice}
               onChange={(e) => setTargetPrice(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { (e.target as HTMLInputElement).blur(); handleAdd(); } }}
               className="flex-1 bg-transparent text-trade-text outline-none text-[16px] font-semibold"
               placeholder="0.00"
               inputMode="decimal"
+              enterKeyHint="done"
             />
             <span className="text-[12px] text-trade-text-muted font-medium">USDT</span>
           </div>
@@ -161,7 +169,12 @@ function PriceAlertSheet({
         {/* Set Alert button */}
         <div className="px-5 mb-4">
           <button
-            onClick={handleAdd}
+            onPointerDown={(e) => {
+              // Dismiss keyboard immediately so layout is stable before click fires
+              e.preventDefault();
+              (document.activeElement as HTMLElement | null)?.blur();
+              handleAdd();
+            }}
             className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 text-[15px] font-bold transition-all active:scale-[0.98]"
             style={{ backgroundColor: "#f0b90b", color: "#000" }}
           >
