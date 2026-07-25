@@ -255,6 +255,7 @@ function RootComponent() {
         appearance: {
           theme: "dark",
           accentColor: "#f0b90b",
+          backgroundColor: "#0f0f0f",
         },
         defaultChain: bsc,
         supportedChains: [bsc, base],
