@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { bsc, base } from "viem/chains";
 
@@ -220,8 +220,27 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function useIsDark() {
+  // Always start as dark on the server (avoids SSR/hydration mismatch).
+  // A useEffect syncs to the real DOM class on the client after mount.
+  const [isDark, setIsDark] = useState(true);
+  useEffect(() => {
+    const el = document.documentElement;
+    // Sync immediately to the actual theme on first client render
+    setIsDark(el.classList.contains("dark"));
+    const observer = new MutationObserver(() => {
+      setIsDark(el.classList.contains("dark"));
+    });
+    observer.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+  return isDark;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const isDark = useIsDark();
+
   useEffect(() => {
     const loader = document.getElementById("asterdex-loader");
     if (!loader) return;
@@ -253,7 +272,8 @@ function RootComponent() {
           "farcaster",
         ],
         appearance: {
-          theme: "#0f0f0f",
+          // Match the app's trade-card surface: #0f0f0f in dark, #ffffff in light
+          theme: isDark ? "#0f0f0f" : "#ffffff",
           accentColor: "#f0b90b",
         },
         defaultChain: bsc,
