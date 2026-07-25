@@ -300,10 +300,7 @@ function Index() {
           </button>
           {/* Notification */}
           <button
-            onClick={() => {
-              setNotifOpen(true);
-              setAlertNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
-            }}
+            onClick={() => setNotifOpen(true)}
             className="relative h-8 w-8 rounded-full border border-trade-text/15 bg-trade-surface/50 flex items-center justify-center active:bg-trade-surface transition-colors"
             aria-label="Notifications"
           >
@@ -935,7 +932,11 @@ function Index() {
       {/* Notifications Sheet */}
       {notifOpen && typeof document !== "undefined" && createPortal(
         <NotificationsSheet
-          onClose={() => setNotifOpen(false)}
+          onClose={() => {
+            setNotifOpen(false);
+            // Clear the bell badge once user has opened and closed the sheet
+            setAlertNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+          }}
           theme={theme}
           alertNotifications={alertNotifications}
         />,
