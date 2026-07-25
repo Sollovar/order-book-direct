@@ -258,7 +258,7 @@ function PairRow({
 
   return (
     <div
-      className="relative flex items-center border-b border-trade-text/5 select-none"
+      className="relative flex items-center select-none"
       style={{ cursor: "pointer" }}
       onPointerDown={startPress}
       onPointerUp={() => {
@@ -281,7 +281,6 @@ function PairRow({
       {/* ── Sticky symbol cell ── */}
       <div
         className="sticky left-0 z-10 flex items-center gap-2 bg-trade-card w-[148px] flex-shrink-0 px-4 py-3"
-        style={{ boxShadow: "4px 0 8px -2px rgba(0,0,0,0.12)" }}
       >
         {/* Star / alert icon — tappable, stops row-select propagation */}
         <button
@@ -486,7 +485,7 @@ export function PairSelectorPanel({
           <div style={{ minWidth: 520 }}>
 
             {/* Hold-to-alert hint */}
-            <div className="flex items-center gap-1.5 px-4 py-2 bg-trade-surface/50 border-b border-trade-text/5">
+            <div className="flex items-center gap-1.5 px-4 py-2 bg-trade-surface/50">
               <Bell className="h-3 w-3 text-trade-text/30 flex-shrink-0" />
               <span className="text-[11px] text-trade-text/30">
                 Hold a pair for 2 seconds to set a price alert
@@ -494,11 +493,10 @@ export function PairSelectorPanel({
             </div>
 
             {/* Column headers */}
-            <div className="flex items-end border-b border-trade-text/8 bg-trade-card">
+            <div className="flex items-end bg-trade-card">
               {/* Sticky symbol header */}
               <div
                 className="sticky left-0 z-10 bg-trade-card w-[148px] flex-shrink-0 px-4 pb-2 pt-1"
-                style={{ boxShadow: "4px 0 8px -2px rgba(0,0,0,0.12)" }}
               >
                 <span className="text-[11px] text-trade-text-muted">Symbol</span>
               </div>
