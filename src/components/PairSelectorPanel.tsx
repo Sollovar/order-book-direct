@@ -15,14 +15,31 @@ export function PairSelectorPanel({ open, onClose }: PairSelectorPanelProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex flex-col bg-trade-card">
+    <div className="fixed inset-0 z-[80] flex flex-col justify-end">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+        onClick={onClose}
+      />
+
+      {/* Sheet */}
+      <div className="relative bg-trade-card rounded-t-3xl shadow-2xl flex flex-col max-h-[90vh]">
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+          <div className="h-[4px] w-9 rounded-full bg-trade-text/20" />
+        </div>
+
       {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-5 pb-3">
+      <div className="flex items-center justify-between px-4 pt-2 pb-3 flex-shrink-0">
         <span className="text-[11px] font-semibold tracking-widest text-trade-text-muted uppercase">
           Select Market
         </span>
-        <button onClick={onClose} className="p-1 text-trade-text/60 active:opacity-50">
-          <X className="h-5 w-5" />
+        <button
+          onClick={onClose}
+          className="h-8 w-8 flex items-center justify-center rounded-full bg-trade-surface active:opacity-60 transition-opacity"
+          aria-label="Close"
+        >
+          <X className="h-[15px] w-[15px] text-trade-text/70" />
         </button>
       </div>
 
@@ -135,6 +152,7 @@ export function PairSelectorPanel({ open, onClose }: PairSelectorPanelProps) {
             </div>
           </button>
         ))}
+      </div>
       </div>
     </div>
   );
