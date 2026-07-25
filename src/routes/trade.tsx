@@ -227,9 +227,9 @@ function Index() {
       </header>
 
       {/* Pair header */}
-      <div className="mb-1 rounded-xl bg-trade-card border border-trade-text/5 overflow-hidden">
+      <div className="mx-2 mb-2 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
         {/* Top row */}
-        <div className="px-3 py-2.5 flex items-center justify-between">
+        <div className="px-5 py-4 flex items-center justify-between">
           {/* Left: icon + symbol (tappable → market selector) */}
           <button
             onClick={() => setPairsOpen(true)}
