@@ -311,7 +311,7 @@ function Index() {
       </div>
 
       {/* Main trading card */}
-      <section className="mx-2 rounded-3xl bg-trade-card shadow-2xl p-5">
+      <section className="mx-1 rounded-3xl bg-trade-card shadow-2xl p-5">
 
         <div className={`grid gap-3 mt-3 ${bookVisible ? "grid-cols-2" : "grid-cols-1"}`}>
           {/* LEFT: order book */}
