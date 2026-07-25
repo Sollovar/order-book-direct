@@ -1,5 +1,6 @@
 import { Search, Star, X, Bell, BellPlus, ChevronUp, ChevronDown, Trash2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { PAIRS, type Pair } from "../lib/pairs";
 import type { PriceAlert } from "../lib/alerts";
 
@@ -363,9 +364,18 @@ export function PairSelectorPanel({
     }
   }
 
+  // Lock body scroll (both axes) while panel is open so the page can't
+  // drift horizontally and pull the fixed panel with it.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[80] flex flex-col justify-end overflow-hidden">
       {/* Backdrop */}
       <div
@@ -505,6 +515,7 @@ export function PairSelectorPanel({
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
-    </div>
+    </div>,
+    document.body
   );
 }
