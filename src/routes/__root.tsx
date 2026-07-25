@@ -253,9 +253,8 @@ function RootComponent() {
           "farcaster",
         ],
         appearance: {
-          theme: "dark",
+          theme: "#0f0f0f",
           accentColor: "#f0b90b",
-          backgroundColor: "#0f0f0f",
         },
         defaultChain: bsc,
         supportedChains: [bsc, base],
