@@ -227,7 +227,7 @@ function Index() {
       </header>
 
       {/* Pair header */}
-      <div className="mx-2 mb-2 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
+      <div className="mx-1 mb-2 rounded-3xl bg-trade-card shadow-2xl overflow-hidden">
         {/* Top row */}
         <div className="px-5 py-4 flex items-center justify-between">
           {/* Left: icon + symbol (tappable → market selector) */}
