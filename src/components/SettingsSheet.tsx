@@ -1,4 +1,4 @@
-import { X, Bell, Volume2, Vibrate, Globe, Shield, Info, FileText, Trash2, Moon, Sun, ChevronRight } from "lucide-react";
+import { X, Globe, Volume2, Bell, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 
 interface SettingsSheetProps {
@@ -28,75 +28,46 @@ function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
   );
 }
 
-function RowToggle({
-  icon: Icon,
-  iconColor,
-  iconBg,
-  label,
-  sub,
-  enabled,
-  onToggle,
-}: {
-  icon: React.ElementType;
-  iconColor: string;
-  iconBg: string;
-  label: string;
-  sub?: string;
-  enabled: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div className="flex items-center gap-3 py-3">
-      <span className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: iconBg }}>
-        <Icon className="h-4 w-4" style={{ color: iconColor }} />
-      </span>
-      <div className="flex-1 min-w-0">
-        <p className="text-[14px] font-medium text-trade-text leading-tight">{label}</p>
-        {sub && <p className="text-[11px] text-trade-text-muted mt-0.5">{sub}</p>}
-      </div>
-      <Toggle enabled={enabled} onToggle={onToggle} />
-    </div>
-  );
-}
-
-function RowLink({
-  icon: Icon,
-  iconColor,
-  iconBg,
-  label,
-  value,
-  onClick,
-}: {
-  icon: React.ElementType;
-  iconColor: string;
-  iconBg: string;
-  label: string;
-  value?: string;
-  onClick?: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="w-full flex items-center gap-3 py-3 active:opacity-60 transition-opacity"
-    >
-      <span className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: iconBg }}>
-        <Icon className="h-4 w-4" style={{ color: iconColor }} />
-      </span>
-      <div className="flex-1 min-w-0 text-left">
-        <p className="text-[14px] font-medium text-trade-text leading-tight">{label}</p>
-      </div>
-      {value && <span className="text-[12px] text-trade-text-muted mr-1">{value}</span>}
-      <ChevronRight className="h-4 w-4 text-trade-text/30 flex-shrink-0" />
-    </button>
-  );
-}
-
 export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProps) {
-  const [notifEnabled, setNotifEnabled] = useState(true);
-  const [soundEnabled, setSoundEnabled] = useState(false);
-  const [hapticEnabled, setHapticEnabled] = useState(true);
+  const [fillSound, setFillSound] = useState(false);
+  const [alertSound, setAlertSound] = useState(true);
+
+  const rows = [
+    {
+      icon: theme === "dark" ? Moon : Sun,
+      iconColor: "#f0b90b",
+      iconBg: "rgba(240,185,11,0.12)",
+      label: "Theme",
+      right: (
+        <Toggle enabled={theme === "dark"} onToggle={toggleTheme} />
+      ),
+      sub: theme === "dark" ? "Dark" : "Light",
+    },
+    {
+      icon: Globe,
+      iconColor: "#22c55e",
+      iconBg: "rgba(34,197,94,0.12)",
+      label: "Language",
+      right: <span className="text-[13px] text-trade-text-muted">English</span>,
+      sub: undefined,
+    },
+    {
+      icon: Volume2,
+      iconColor: "#3b82f6",
+      iconBg: "rgba(59,130,246,0.12)",
+      label: "Fill Sounds",
+      right: <Toggle enabled={fillSound} onToggle={() => setFillSound(v => !v)} />,
+      sub: "Play a sound when an order is filled",
+    },
+    {
+      icon: Bell,
+      iconColor: "#a855f7",
+      iconBg: "rgba(168,85,247,0.12)",
+      label: "Price Alert Sound",
+      right: <Toggle enabled={alertSound} onToggle={() => setAlertSound(v => !v)} />,
+      sub: "Play a sound when a price alert fires",
+    },
+  ];
 
   return (
     <div
@@ -111,7 +82,7 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
 
       {/* Sheet */}
       <div
-        className="relative bg-trade-card rounded-t-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
+        className="relative bg-trade-card rounded-t-3xl shadow-2xl"
         style={{ paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))" }}
       >
         {/* Drag handle */}
@@ -134,103 +105,23 @@ export function SettingsSheet({ onClose, theme, toggleTheme }: SettingsSheetProp
           <p className="text-[18px] font-bold text-trade-text leading-tight">Settings</p>
         </div>
 
-        <div className="px-5 space-y-6">
-
-          {/* Notifications */}
-          <div>
-            <p className="text-[12px] text-trade-text-muted font-medium mb-1">Notifications</p>
-            <div className="divide-y divide-trade-text/5">
-              <RowToggle
-                icon={Bell}
-                iconColor="#f0b90b"
-                iconBg="rgba(240,185,11,0.12)"
-                label="Push Notifications"
-                sub="Order fills, liquidations, alerts"
-                enabled={notifEnabled}
-                onToggle={() => setNotifEnabled(v => !v)}
-              />
-              <RowToggle
-                icon={Volume2}
-                iconColor="#3b82f6"
-                iconBg="rgba(59,130,246,0.12)"
-                label="Sound Effects"
-                sub="Play sounds on fills and alerts"
-                enabled={soundEnabled}
-                onToggle={() => setSoundEnabled(v => !v)}
-              />
-              <RowToggle
-                icon={Vibrate}
-                iconColor="#8b5cf6"
-                iconBg="rgba(139,92,246,0.12)"
-                label="Haptic Feedback"
-                sub="Vibrate on key interactions"
-                enabled={hapticEnabled}
-                onToggle={() => setHapticEnabled(v => !v)}
-              />
+        {/* Rows */}
+        <div className="px-5 divide-y divide-trade-text/5">
+          {rows.map(({ icon: Icon, iconColor, iconBg, label, sub, right }) => (
+            <div key={label} className="flex items-center gap-3 py-3.5">
+              <span
+                className="h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: iconBg }}
+              >
+                <Icon className="h-4 w-4" style={{ color: iconColor }} />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[14px] font-medium text-trade-text leading-tight">{label}</p>
+                {sub && <p className="text-[11px] text-trade-text-muted mt-0.5">{sub}</p>}
+              </div>
+              {right}
             </div>
-          </div>
-
-          {/* Display */}
-          <div>
-            <p className="text-[12px] text-trade-text-muted font-medium mb-1">Display</p>
-            <div className="divide-y divide-trade-text/5">
-              <RowLink
-                icon={theme === "dark" ? Moon : Sun}
-                iconColor="#f0b90b"
-                iconBg="rgba(240,185,11,0.12)"
-                label="Theme"
-                value={theme === "dark" ? "Dark" : "Light"}
-                onClick={() => { toggleTheme(); }}
-              />
-              <RowLink
-                icon={Globe}
-                iconColor="#22c55e"
-                iconBg="rgba(34,197,94,0.12)"
-                label="Language"
-                value="English"
-              />
-            </div>
-          </div>
-
-          {/* Security */}
-          <div>
-            <p className="text-[12px] text-trade-text-muted font-medium mb-1">Security</p>
-            <div className="divide-y divide-trade-text/5">
-              <RowLink
-                icon={Shield}
-                iconColor="#3b82f6"
-                iconBg="rgba(59,130,246,0.12)"
-                label="Privacy & Security"
-              />
-            </div>
-          </div>
-
-          {/* App */}
-          <div>
-            <p className="text-[12px] text-trade-text-muted font-medium mb-1">App</p>
-            <div className="divide-y divide-trade-text/5">
-              <RowLink
-                icon={Trash2}
-                iconColor="#8b8b8b"
-                iconBg="rgba(139,139,139,0.12)"
-                label="Clear Cache"
-              />
-              <RowLink
-                icon={FileText}
-                iconColor="#8b8b8b"
-                iconBg="rgba(139,139,139,0.12)"
-                label="Terms of Service"
-              />
-              <RowLink
-                icon={Info}
-                iconColor="#8b8b8b"
-                iconBg="rgba(139,139,139,0.12)"
-                label="About AsterDex"
-                value="v1.0.0"
-              />
-            </div>
-          </div>
-
+          ))}
         </div>
       </div>
     </div>
