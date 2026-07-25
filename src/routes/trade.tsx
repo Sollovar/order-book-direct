@@ -92,7 +92,7 @@ function Index() {
   const [pairsSub, setPairsSub] = useState("All markets");
   const [countdown, setCountdown] = useState(39 * 60 + 58); // seconds
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const tabs = ["Open Orders", "Positions", "Assets", "Predictions"];
+  const tabs = ["Open Orders", "Ladder History", "Order History", "Trade History"];
   const [orderType, setOrderType] = useState("Limit");
   const [orderTypeSheetOpen, setOrderTypeSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -880,6 +880,12 @@ function Index() {
                 <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
                 <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
               </svg>
+            ),
+          },
+          {
+            label: "Portfolio",
+            icon: (active: boolean) => (
+              <PieChart className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
             ),
           },
           {
