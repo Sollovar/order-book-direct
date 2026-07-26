@@ -118,7 +118,7 @@ function RootShell({ children }: { children: ReactNode }) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #0d0d0d;
+            background: #000000;
             transition: opacity 0.4s ease, visibility 0.4s ease;
           }
           #asterdex-loader.light {
@@ -149,7 +149,7 @@ function RootShell({ children }: { children: ReactNode }) {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #f0b90b;
+            background: #f3d0a2;
             display: flex;
             align-items: center;
             justify-content: center;

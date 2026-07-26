@@ -253,8 +253,8 @@ function Index() {
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
-      root.style.backgroundColor = "oklch(0.1 0 0)";
-      document.body.style.backgroundColor = "oklch(0.1 0 0)";
+      root.style.backgroundColor = "#000000";
+      document.body.style.backgroundColor = "#000000";
     } else {
       root.classList.remove("dark");
       root.style.backgroundColor = "oklch(0.98 0 0)";
