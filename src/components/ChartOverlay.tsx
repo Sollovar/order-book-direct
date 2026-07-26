@@ -202,6 +202,11 @@ export function ChartOverlay({
   const [pairsOpen, setPairsOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [alertSound, setAlertSound] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const saved = localStorage.getItem("asterdex-alert-sound");
+    return saved === null ? true : saved === "true";
+  });
 
   const currentPrice = 63934.3;
 
@@ -492,7 +497,12 @@ export function ChartOverlay({
       </nav>
 
       {/* Pair selector panel */}
-      <PairSelectorPanel open={pairsOpen} onClose={() => setPairsOpen(false)} />
+      <PairSelectorPanel
+        open={pairsOpen}
+        onClose={() => setPairsOpen(false)}
+        onAddAlert={() => {}}
+        onRemoveAlert={() => {}}
+      />
 
       {/* Notifications Sheet */}
       {notifOpen && typeof document !== "undefined" && createPortal(
@@ -502,7 +512,16 @@ export function ChartOverlay({
 
       {/* Settings Sheet */}
       {settingsOpen && typeof document !== "undefined" && createPortal(
-        <SettingsSheet onClose={() => setSettingsOpen(false)} theme={theme} toggleTheme={toggleTheme} />,
+        <SettingsSheet
+          onClose={() => setSettingsOpen(false)}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          alertSound={alertSound}
+          onAlertSoundChange={(v) => {
+            setAlertSound(v);
+            localStorage.setItem("asterdex-alert-sound", String(v));
+          }}
+        />,
         document.body
       )}
     </div>

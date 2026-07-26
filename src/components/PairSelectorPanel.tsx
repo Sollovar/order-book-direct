@@ -346,8 +346,8 @@ export function PairSelectorPanel({
   open,
   onClose,
   alerts = [],
-  onAddAlert,
-  onRemoveAlert,
+  onAddAlert = () => {},
+  onRemoveAlert = () => {},
 }: PairSelectorPanelProps) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
