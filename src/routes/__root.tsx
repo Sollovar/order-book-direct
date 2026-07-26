@@ -118,7 +118,7 @@ function RootShell({ children }: { children: ReactNode }) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #0d0d0d;
+            background: #000000;
             transition: opacity 0.4s ease, visibility 0.4s ease;
           }
           #asterdex-loader.light {
@@ -149,7 +149,7 @@ function RootShell({ children }: { children: ReactNode }) {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #f0b90b;
+            background: #f3d0a2;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -184,10 +184,10 @@ function RootShell({ children }: { children: ReactNode }) {
           <div className="al-ring">
             {/* Spinning gold arc */}
             <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="36" cy="36" r="32" stroke="rgba(240,185,11,0.15)" strokeWidth="3.5" />
+              <circle cx="36" cy="36" r="32" stroke="rgba(243,208,162,0.15)" strokeWidth="3.5" />
               <path
                 d="M36 4 A32 32 0 0 1 68 36"
-                stroke="#f0b90b"
+                stroke="#f3d0a2"
                 strokeWidth="3.5"
                 strokeLinecap="round"
               />
@@ -274,7 +274,7 @@ function RootComponent() {
         appearance: {
           // Match the app's trade-card surface: #0f0f0f in dark, #ffffff in light
           theme: isDark ? "#0f0f0f" : "#ffffff",
-          accentColor: "#f0b90b",
+          accentColor: "#f3d0a2",
         },
         defaultChain: bsc,
         supportedChains: [bsc, base],

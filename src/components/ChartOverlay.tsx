@@ -202,6 +202,11 @@ export function ChartOverlay({
   const [pairsOpen, setPairsOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [alertSound, setAlertSound] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const saved = localStorage.getItem("asterdex-alert-sound");
+    return saved === null ? true : saved === "true";
+  });
 
   const currentPrice = 63934.3;
 
@@ -447,28 +452,28 @@ export function ChartOverlay({
           {
             label: "Markets",
             icon: (active: boolean) => (
-              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
+              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`} />
             ),
           },
           {
             label: "Trade",
             icon: (active: boolean) => (
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
-                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
-                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
+                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-[#f3d0a2]" : "text-trade-text/40"} />
+                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-[#f3d0a2]" : "text-trade-text/40"} />
               </svg>
             ),
           },
           {
             label: "Portfolio",
             icon: (active: boolean) => (
-              <PieChart className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
+              <PieChart className={`h-[18px] w-[18px] ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`} />
             ),
           },
           {
             label: "Account",
             icon: (active: boolean) => (
-              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
+              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`} />
             ),
           },
         ].map(({ label, icon }) => {
@@ -483,7 +488,7 @@ export function ChartOverlay({
               className="flex items-center gap-2 transition-opacity active:opacity-60"
             >
               {icon(active)}
-              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`}>
+              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`}>
                 {label}
               </span>
             </button>
@@ -492,7 +497,12 @@ export function ChartOverlay({
       </nav>
 
       {/* Pair selector panel */}
-      <PairSelectorPanel open={pairsOpen} onClose={() => setPairsOpen(false)} />
+      <PairSelectorPanel
+        open={pairsOpen}
+        onClose={() => setPairsOpen(false)}
+        onAddAlert={() => {}}
+        onRemoveAlert={() => {}}
+      />
 
       {/* Notifications Sheet */}
       {notifOpen && typeof document !== "undefined" && createPortal(
@@ -502,7 +512,16 @@ export function ChartOverlay({
 
       {/* Settings Sheet */}
       {settingsOpen && typeof document !== "undefined" && createPortal(
-        <SettingsSheet onClose={() => setSettingsOpen(false)} theme={theme} toggleTheme={toggleTheme} />,
+        <SettingsSheet
+          onClose={() => setSettingsOpen(false)}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          alertSound={alertSound}
+          onAlertSoundChange={(v) => {
+            setAlertSound(v);
+            localStorage.setItem("asterdex-alert-sound", String(v));
+          }}
+        />,
         document.body
       )}
     </div>

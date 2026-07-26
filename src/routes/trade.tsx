@@ -253,8 +253,8 @@ function Index() {
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
-      root.style.backgroundColor = "oklch(0.1 0 0)";
-      document.body.style.backgroundColor = "oklch(0.1 0 0)";
+      root.style.backgroundColor = "#000000";
+      document.body.style.backgroundColor = "#000000";
     } else {
       root.classList.remove("dark");
       root.style.backgroundColor = "oklch(0.98 0 0)";
@@ -382,7 +382,7 @@ function Index() {
               >
                 <span
                   className="absolute inset-0 rounded-full transition-colors duration-200"
-                  style={{ backgroundColor: bookVisible ? "#f0b90b" : "rgba(128,128,128,0.25)" }}
+                  style={{ backgroundColor: bookVisible ? "#f3d0a2" : "rgba(128,128,128,0.25)" }}
                 />
                 <span
                   className="absolute top-[2px] rounded-full bg-white shadow-sm transition-all duration-200"
@@ -647,8 +647,8 @@ function Index() {
               <div className="relative">
                 <style>{`
                   .gold-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 2px; border-radius: 9999px; outline: none; background: transparent; }
-                  .gold-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 9999px; background: #f0b90b; cursor: pointer; border: 2px solid #f0b90b; box-shadow: 0 0 0 3px rgba(240,185,11,0.15); }
-                  .gold-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 9999px; background: #f0b90b; cursor: pointer; border: 2px solid #f0b90b; }
+                  .gold-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 9999px; background: #f3d0a2; cursor: pointer; border: 2px solid #f3d0a2; box-shadow: 0 0 0 3px rgba(243,208,162,0.15); }
+                  .gold-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 9999px; background: #f3d0a2; cursor: pointer; border: 2px solid #f3d0a2; }
                 `}</style>
                 <input
                   type="range"
@@ -663,7 +663,7 @@ function Index() {
                   }}
                   className="gold-slider"
                   style={{
-                    background: `linear-gradient(to right, #f0b90b ${sliderPct}%, rgba(128,128,128,0.2) ${sliderPct}%)`,
+                    background: `linear-gradient(to right, #f3d0a2 ${sliderPct}%, rgba(128,128,128,0.2) ${sliderPct}%)`,
                   }}
                 />
                 {/* Tick marks at 25 / 50 / 75 */}
@@ -677,7 +677,7 @@ function Index() {
                         const filled = ((availableBalance * pct) / 100);
                         setOrderSize(filled > 0 ? filled.toFixed(2) : "");
                       }}
-                      className="text-[10px] text-trade-text-muted active:text-[#f0b90b] transition-colors"
+                      className="text-[10px] text-trade-text-muted active:text-[#f3d0a2] transition-colors"
                     >
                       {label}
                     </button>
@@ -699,7 +699,7 @@ function Index() {
                 onClick={() => setTpslEnabled(v => !v)}
                 className="flex items-center gap-2 text-[12px] text-trade-text/70 w-full text-left"
               >
-                <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${tpslEnabled ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
+                <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${tpslEnabled ? "bg-[#f3d0a2] border-[#f3d0a2]" : "border-trade-text/30"}`}>
                   {tpslEnabled && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
                 </span>
                 <span className="border-b border-dashed border-trade-text/20">TP/SL</span>
@@ -746,7 +746,7 @@ function Index() {
                 onClick={() => setPostOnly(v => !v)}
                 className="flex items-center gap-2 text-[12px] text-trade-text/70 w-full text-left"
               >
-                <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${postOnly ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
+                <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${postOnly ? "bg-[#f3d0a2] border-[#f3d0a2]" : "border-trade-text/30"}`}>
                   {postOnly && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
                 </span>
                 <span className="border-b border-dashed border-trade-text/20">Post Only</span>
@@ -758,7 +758,7 @@ function Index() {
                   onClick={() => setExpiryEnabled(v => !v)}
                   className="flex items-center gap-2 text-[12px] text-trade-text/70 w-full text-left"
                 >
-                  <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${expiryEnabled ? "bg-[#f0b90b] border-[#f0b90b]" : "border-trade-text/30"}`}>
+                  <span className={`h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors ${expiryEnabled ? "bg-[#f3d0a2] border-[#f3d0a2]" : "border-trade-text/30"}`}>
                     {expiryEnabled && <Check className="h-2.5 w-2.5 text-black" strokeWidth={3} />}
                   </span>
                   <span className="border-b border-dashed border-trade-text/20">Expiry</span>
@@ -836,14 +836,14 @@ function Index() {
       {/* Price alert fired toast */}
       {firedToast && (
         <div
-          className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl bg-trade-card border border-[#f0b90b]/30"
+          className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl bg-trade-card border border-[#f3d0a2]/30"
           style={{
             backdropFilter: "blur(12px)",
             minWidth: 260,
             animation: "slide-down 0.25s ease",
           }}
         >
-          <Bell className="h-4 w-4 flex-shrink-0" style={{ color: "#f0b90b" }} />
+          <Bell className="h-4 w-4 flex-shrink-0" style={{ color: "#f3d0a2" }} />
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-bold text-trade-text leading-tight">
               Price Alert Hit
@@ -870,7 +870,7 @@ function Index() {
           {
             label: "Markets",
             icon: (active: boolean) => (
-              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
+              <BarChart2 className={`h-[18px] w-[18px] ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`} />
             ),
           },
           {
@@ -878,21 +878,21 @@ function Index() {
             icon: (active: boolean) => (
               /* Two overlapping circles — Hyperliquid logo mark */
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
-                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
-                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-[#f0b90b]" : "text-trade-text/40"} />
+                <circle cx="6.5" cy="9" r="5.5" fill="currentColor" className={active ? "text-[#f3d0a2]" : "text-trade-text/40"} />
+                <circle cx="11.5" cy="9" r="5.5" fill="currentColor" fillOpacity="0.65" className={active ? "text-[#f3d0a2]" : "text-trade-text/40"} />
               </svg>
             ),
           },
           {
             label: "Portfolio",
             icon: (active: boolean) => (
-              <PieChart className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
+              <PieChart className={`h-[18px] w-[18px] ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`} />
             ),
           },
           {
             label: "Account",
             icon: (active: boolean) => (
-              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`} />
+              <UserCircle className={`h-[18px] w-[18px] ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`} />
             ),
           },
         ].map(({ label, icon }) => {
@@ -907,7 +907,7 @@ function Index() {
               className="flex items-center gap-2 transition-opacity active:opacity-60"
             >
               {icon(active)}
-              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#f0b90b]" : "text-trade-text/40"}`}>
+              <span className={`text-[14px] font-medium tracking-tight ${active ? "text-[#f3d0a2]" : "text-trade-text/40"}`}>
                 {label}
               </span>
             </button>
@@ -1012,13 +1012,13 @@ function Index() {
                     onClick={() => { setOrderType(label); setOrderTypeSheetOpen(false); }}
                     className={`relative flex flex-col items-start text-left rounded-2xl px-4 py-4 transition-all active:scale-[0.97] ${
                       active
-                        ? "ring-1 ring-[#f0b90b]/70"
+                        ? "ring-1 ring-[#f3d0a2]/70"
                         : "bg-trade-text/5 ring-1 ring-transparent"
                     }`}
-                    style={active ? { backgroundColor: "rgba(240,185,11,0.12)" } : undefined}
+                    style={active ? { backgroundColor: "rgba(243,208,162,0.12)" } : undefined}
                   >
                     {active && (
-                      <span className="absolute top-3 right-3 h-[18px] w-[18px] rounded-full flex items-center justify-center" style={{ backgroundColor: "#f0b90b" }}>
+                      <span className="absolute top-3 right-3 h-[18px] w-[18px] rounded-full flex items-center justify-center" style={{ backgroundColor: "#f3d0a2" }}>
                         <Check className="h-[10px] w-[10px] text-black" strokeWidth={3} />
                       </span>
                     )}
@@ -1141,8 +1141,8 @@ function MobileMenuSheet({ onClose, theme }: { onClose: () => void; theme: "ligh
                 className="w-full flex items-center gap-3.5 py-2.5 active:opacity-60 transition-opacity"
               >
                 <span className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: "rgba(240,185,11,0.12)" }}>
-                  <Icon className="h-4 w-4" style={{ color: "#f0b90b" }} />
+                  style={{ backgroundColor: "rgba(243,208,162,0.12)" }}>
+                  <Icon className="h-4 w-4" style={{ color: "#f3d0a2" }} />
                 </span>
                 <span className="text-[16px] font-medium text-trade-text">{label}</span>
               </button>
@@ -1159,8 +1159,8 @@ function MobileMenuSheet({ onClose, theme }: { onClose: () => void; theme: "ligh
                 className="w-full flex items-center gap-3.5 py-2.5 active:opacity-60 transition-opacity"
               >
                 <span className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: "rgba(240,185,11,0.12)" }}>
-                  <Icon className="h-4 w-4" style={{ color: "#f0b90b" }} />
+                  style={{ backgroundColor: "rgba(243,208,162,0.12)" }}>
+                  <Icon className="h-4 w-4" style={{ color: "#f3d0a2" }} />
                 </span>
                 <span className="text-[16px] font-medium text-trade-text">{label}</span>
               </button>
