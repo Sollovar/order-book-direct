@@ -79,9 +79,9 @@ function LadderRow({
       {/* Icon */}
       <span
         className="h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: "rgba(240,185,11,0.12)" }}
+        style={{ backgroundColor: "rgba(243,208,162,0.12)" }}
       >
-        <Layers className="h-4 w-4" style={{ color: "#f0b90b" }} />
+        <Layers className="h-4 w-4" style={{ color: "#f3d0a2" }} />
       </span>
 
       {/* Info */}
@@ -103,7 +103,7 @@ function LadderRow({
           <div className="flex-1 h-1 rounded-full bg-trade-surface overflow-hidden">
             <div
               className="h-full rounded-full"
-              style={{ width: `${pct}%`, background: "#f0b90b" }}
+              style={{ width: `${pct}%`, background: "#f3d0a2" }}
             />
           </div>
           <span className="text-[11px] text-trade-text-muted flex-shrink-0">
@@ -190,7 +190,7 @@ function LadderDetailSheet({
             <div className="flex-1 h-1.5 rounded-full bg-trade-surface overflow-hidden">
               <div
                 className="h-full rounded-full transition-all"
-                style={{ width: `${pct}%`, background: "#f0b90b" }}
+                style={{ width: `${pct}%`, background: "#f3d0a2" }}
               />
             </div>
             <span className="text-[12px] text-trade-text-muted">
@@ -212,7 +212,7 @@ function LadderDetailSheet({
                 {/* Level badge */}
                 <span
                   className="h-7 w-7 rounded-lg flex items-center justify-center flex-shrink-0 text-[11px] font-bold"
-                  style={{ backgroundColor: "rgba(240,185,11,0.12)", color: "#f0b90b" }}
+                  style={{ backgroundColor: "rgba(243,208,162,0.12)", color: "#f3d0a2" }}
                 >
                   {child.level}
                 </span>

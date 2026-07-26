@@ -74,7 +74,7 @@ function PriceAlertSheet({
               {pair.symbol}
               <span
                 className="text-[11px] font-semibold px-1.5 py-0.5 rounded"
-                style={{ backgroundColor: "rgba(240,185,11,0.12)", color: "#f0b90b" }}
+                style={{ backgroundColor: "rgba(243,208,162,0.12)", color: "#f3d0a2" }}
               >
                 {pair.lev}
               </span>
@@ -178,7 +178,7 @@ function PriceAlertSheet({
               handleAdd();
             }}
             className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 text-[15px] font-bold transition-all active:scale-[0.98]"
-            style={{ backgroundColor: "#f0b90b", color: "#000" }}
+            style={{ backgroundColor: "#f3d0a2", color: "#000" }}
           >
             <BellPlus className="h-4 w-4" />
             Set Alert
@@ -293,9 +293,9 @@ function PairRow({
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           {hasAlert ? (
-            <Bell className="h-3.5 w-3.5 text-[#f0b90b]" />
+            <Bell className="h-3.5 w-3.5 text-[#f3d0a2]" />
           ) : isFavorite ? (
-            <Star className="h-3.5 w-3.5 text-[#f0b90b] fill-[#f0b90b]" />
+            <Star className="h-3.5 w-3.5 text-[#f3d0a2] fill-[#f3d0a2]" />
           ) : (
             <Star className="h-3.5 w-3.5 text-trade-text/30" />
           )}
@@ -471,7 +471,7 @@ export function PairSelectorPanel({
               onClick={() => setFilter(f)}
               className={`flex-shrink-0 pb-2.5 text-[13px] font-medium border-b-2 transition-colors ${
                 filter === f
-                  ? "border-[#f0b90b] text-trade-text"
+                  ? "border-[#f3d0a2] text-trade-text"
                   : "border-transparent text-trade-text-muted"
               }`}
             >
